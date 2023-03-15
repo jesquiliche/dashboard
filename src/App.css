@@ -49,8 +49,8 @@ a:focus {
     SIDEBAR STYLE
 ----------------------------------------------------- */
 .sidebar {
-  min-width: 210px;
-  max-width: 260px;
+  min-width: 230px;
+  max-width: 230px;
   background: #5555acea;
   color: #fff;
   margin-left: -250px;
@@ -59,6 +59,8 @@ a:focus {
 
 .submenu {
   background: rgba(209, 219, 238, 0.3);
+  min-width: 150px;
+  max-width: 200px;
 }
 .sidebar.is-open {
   margin-left: 0;
@@ -110,12 +112,12 @@ li a.dropdown-toggle::after {
 }
 .side-menu {
   height: calc(100vh - 130px);
-  overflow-y: scroll;
+/* overflow-y: scroll;*/
 }
 
 .side-menu::-webkit-scrollbar {
-  width: 10px;
-  background-color: #5555acea;
+ /* width: 10px;
+  background-color: #5555acea;*/
 }
 
 .side-menu::-webkit-scrollbar-thumb {

@@ -32,9 +32,9 @@ const SideBar = ({ isOpen, toggle }) => {
       <div className="side-menu">
         <Nav vertical className="list-unstyled pb-3">
           <p>Configuración</p>
-          <SubMenu title="Usuario >" icon={faHome} items={submenus[0]} />
+          <SubMenu title="Usuario" icon={faHome} items={submenus[0]} />
 
-          <SubMenu title="Tablas >" icon={faCopy} items={submenus[1]} />
+          <SubMenu title="Tablas" icon={faCopy} items={submenus[1]} />
           <NavItem>
             <NavLink tag={Link} to={"/contact"}>
               <FontAwesomeIcon

@@ -15,9 +15,9 @@ const SubMenu = (props) => {
         onClick={toggle}
         className={classNames({ "menu-open": !collapsed })}
       >
-        <NavLink className="dropdown-toggle">
-          <FontAwesomeIcon icon={icon} className="mr-2 text-white" />
-          <a className="text-white"> {title}</a>
+        <NavLink className="dropdown-toggle d-inline-flex align-items-center">
+          <FontAwesomeIcon icon={icon} className="ml-2 text-white d-inline-flex align-items-center" /> 
+          <a className="mx-1 text-white"> {title}</a>
         </NavLink>
       </NavItem>
       <Collapse
@@ -25,7 +25,8 @@ const SubMenu = (props) => {
         navbar
         className={classNames("items-menu", { "mb-1": !collapsed })}
       >
-        <div className="card ml-4 mr-3 submenu">
+        <div className="container">
+        <div className="card ml-2 mr-3 submenu">
         {items.map((item, index) => (
           <NavItem key={index} className="pl-1">
             <NavLink tag={Link} to={item.target}>
@@ -33,6 +34,7 @@ const SubMenu = (props) => {
             </NavLink>
           </NavItem>
         ))}
+        </div>
         </div>
       </Collapse>
     </div>
