@@ -12,6 +12,7 @@ const Register = (props) => {
   });
 
   const [err, setErr] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleOnChange = (e) => {
     setDatos({
@@ -22,7 +23,9 @@ const Register = (props) => {
 
   const handleOnsubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await InsertarDatos(datos);
+    setLoading(false);
   };
 
   //Insertar en base de datos
@@ -39,9 +42,16 @@ const Register = (props) => {
     });
 
     const response = await data.json();
+    const statusCode = data.status;
+    console.log(statusCode);
     let errorArray = [];
-    for (const property in response) {
-      errorArray.push(`${response[property]}`);
+    if(statusCode!=200) {
+      
+      for (const property in response) {
+        errorArray.push(`${response[property]}`);
+      }
+      }else {
+       errorArray.push("Usuario registrado correctamente");
     }
 
     setErr(errorArray);
@@ -83,6 +93,17 @@ const Register = (props) => {
                   onChange={handleOnChange}
                 />
               </div>
+              {loading ? (
+                <div className="text-center my-2">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                <button type="submit" className="btn btn-primary w-100">
+                  Registrarse
+                </button>
+              )}
               <div className="px-4 py-1 mt-4 alert alert-primary" role="alert">
                 {err.map((e, i) => (
                   <div key={i}>
@@ -90,9 +111,6 @@ const Register = (props) => {
                   </div>
                 ))}
               </div>
-              <button type="submit" className="btn btn-primary w-100">
-                Registrarse
-              </button>
             </form>
           </div>
         </div>

@@ -45,21 +45,7 @@ const Topbar = ({ toggleSidebar }) => {
               {user ? "CONECTADO" : "NO CONECTADO"}
             </NavLink>
           </NavItem>
-          <NavItem>
-            <NavLink tag={Link} to={"/page-2"}>
-              page 2
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink tag={Link} to={"/page-3"}>
-              page 3
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink tag={Link} to={"/page-4"}>
-              page 4
-            </NavLink>
-          </NavItem>
+         
         </Nav>
       </Collapse>
     </Navbar>

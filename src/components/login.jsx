@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 const Login = () => {
   const navigate = useNavigate();
   const { user, signIn } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   const [datos, setDatos] = useState({
     email: "",
@@ -23,8 +24,11 @@ const Login = () => {
 
   const handleOnsubmit = (e) => {
     e.preventDefault();
-
+    setLoading(true);
+    
     ObtenerToken(datos);
+    console.log(loading)
+    setLoading(false);
   };
 
   let token;
@@ -70,12 +74,10 @@ const Login = () => {
           //Si se produce un error los datos inicio de sesión son incorrectos
           // o el servidor no esta disponible
           .catch((error) => {
-            alert(error);
             setDataErr("Credenciales no validas");
           });
         //Si todo fue correcto enviar a página de inicio
 
-        console.log(data);
       } else {
         setDataErr(null);
         signIn();
@@ -113,9 +115,18 @@ const Login = () => {
                 required
               />
 
-              <button type="submit" className="btn btn-primary w-100">
-                Iniciar Sessión
-              </button>
+
+              {loading ? (
+                <div className="text-center my-2">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                <button type="submit" className="btn btn-primary w-100">
+                  Iniciar sesión
+                </button>
+              )}
             </form>
             {dataErr ? (
               <div className="alert alert-secondary py-1" role="alert">
