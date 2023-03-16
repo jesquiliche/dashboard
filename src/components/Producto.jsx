@@ -19,6 +19,7 @@ const Producto = (props) => {
   const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     ConsultarDatos();
@@ -40,6 +41,7 @@ const Producto = (props) => {
       .then((response) => response.json())
       .then((data) => {
         setProductos(data);
+        setIsLoading(false); // Cambia isLoading a false
         console.log(data);
       })
       .catch((error) => setDataErr("Error"));
@@ -53,32 +55,40 @@ const Producto = (props) => {
             <h3>Productos</h3>
           </div>
           <div className="card-body">
-            <table className="table table-striped">
-              <thead>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Imagen</th>
-              </thead>
-              <tbody>
-                {productos.map((e) => (
-                  <tr>
-                    <td>{e.nombre}</td>
-                    <td>{e.descripcion}</td>
-                    <td>{e.precio}</td>
-                    <td>{e.imagen}</td>
-                    <td>
-                      <Button color="danger mx-1">
-                        <FontAwesomeIcon
-                          icon={faUserEdit}
-                          className="ml-0 text-white mx-auto"
-                        />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {isLoading ? ( // Mostrar "Cargando..." mientras isLoading es verdadero
+              <div className="text-center my-2">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            ) : (
+              <table className="table table-striped">
+                <thead>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Imagen</th>
+                </thead>
+                <tbody>
+                  {productos.map((e) => (
+                    <tr>
+                      <td>{e.nombre}</td>
+                      <td>{e.descripcion}</td>
+                      <td>{e.precio}</td>
+                      <td>{e.imagen}</td>
+                      <td>
+                        <Button color="danger mx-1">
+                          <FontAwesomeIcon
+                            icon={faUserEdit}
+                            className="ml-0 text-white mx-auto"
+                          />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
           {dataErr ? (
             <div className="alert alert-secondary mt-2 py-2" role="alert">

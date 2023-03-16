@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,18 +16,21 @@ import { useNavigate } from "react-router-dom";
 const Proveedor = (props) => {
   const navigate = useNavigate();
   const [proveedores, setProveedores] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [dataErr, setDataErr] = useState();
 
   useEffect(() => {
     ConsultarDatos();
   }, []);
 
-  //Consultamos los datos de la tabla proveedores
-  const ConsultarDatos = () => {
+  // Consultamos los datos de la tabla proveedores
+  const ConsultarDatos = async () => {
     const cookies = new Cookies();
     const token = cookies.get("token");
 
-    fetch(`http://localhost:8000/api/v1/proveedores`, {
+    setLoading(true);
+
+    await fetch(`http://localhost:8000/api/v1/proveedores`, {
       method: "GET",
       headers: {
         Authorization: "bearer " + token.replace(/['"]+/g, ""),
@@ -39,9 +41,12 @@ const Proveedor = (props) => {
       .then((response) => response.json())
       .then((data) => {
         setProveedores(data);
-        console.log(data);
+        setLoading(false);
       })
-      .catch((error) => setDataErr("Error"));
+      .catch((error) => {
+        setDataErr("Error");
+        setLoading(false);
+      });
   };
 
   return (
@@ -52,39 +57,47 @@ const Proveedor = (props) => {
             <h3>Proveedores</h3>
           </div>
           <div className="card-body">
-            <table className="table table-striped">
-              <thead>
-                <th>Nif</th>
-                <th>Nombre</th>
-                <th>C. Postal</th>
-                <th>Población</th>
-              </thead>
-              <tbody>
-                {proveedores.map((e) => (
+            {loading ? (
+              <div className="text-center my-2">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              </div>
+            ) : (
+              <Table className="table table-striped">
+                <thead>
                   <tr>
-                    <td>{e.nif}</td>
-                    <td>{e.nombre}</td>
-                    <td>{e.cod_postal}</td>
-                    <td>{e.poblacion}</td>
-                    <td>
-                      <Button color="danger mx-1">
-                        <FontAwesomeIcon
-                          icon={faUserEdit}
-                          className="ml-0 text-white mx-auto"
-                        />
-                      </Button>
-                    </td>
+                    <th>Nif</th>
+                    <th>Nombre</th>
+                    <th>C. Postal</th>
+                    <th>Población</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {proveedores.map((e) => (
+                    <tr key={e.id}>
+                      <td>{e.nif}</td>
+                      <td>{e.nombre}</td>
+                      <td>{e.cod_postal}</td>
+                      <td>{e.poblacion}</td>
+                      <td>
+                        <Button color="danger mx-1">
+                          <FontAwesomeIcon
+                            icon={faUserEdit}
+                            className="ml-0 text-white mx-auto"
+                          />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
           </div>
-          {dataErr ? (
+          {dataErr && (
             <div className="alert alert-secondary mt-2 py-2" role="alert">
               {dataErr}
             </div>
-          ) : (
-            ""
           )}
         </div>
       </div>
