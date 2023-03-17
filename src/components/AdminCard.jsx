@@ -1,34 +1,23 @@
-import React from 'react'
+import React from 'react';
+import { Card, CardBody } from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 const AdminCard = (props) => {
-    const {color,title,icon}=props;
+    const {color, title, icon} = props;
+
     return (
-        <>
-            
-            <div className="container col-lg-3">
-                <div className={`card card-shadow ${color}`} >
-                    <div className="text-center text-white py-2">
-                        <FontAwesomeIcon icon={icon}  />
-                        
-                        <span> {title}</span>
-                
-                        
-                        
-                        
-                    </div>
-                    <FontAwesomeIcon icon={props.FontAwesomeIcon} className="mr-2 text-dark" />
-                    <div className="card-body text-white">
-                       prueba
-                    </div>
-                    
+        <div className="col-lg-3">
+            <Card className={`card-shadow ${color}`}>
+                <div className="text-center text-white py-2">
+                    <FontAwesomeIcon icon={icon} />
+                    <span> {title}</span>
                 </div>
-                </div>
-            
-            
-        </>
-    )
+                <CardBody className="text-white">
+                    prueba
+                </CardBody>
+            </Card>
+        </div>
+    );
 }
 
-export default AdminCard
+export default AdminCard;

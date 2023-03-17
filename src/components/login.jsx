@@ -2,10 +2,22 @@ import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
 import Cookies from "universal-cookie";
+import {
+  Container,
+  Card,
+  CardBody,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Spinner,
+  Alert,
+} from "reactstrap";
 
 const Login = () => {
   const navigate = useNavigate();
-  const {signIn } = useContext(UserContext);
+  const { signIn } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
   const [datos, setDatos] = useState({
@@ -63,60 +75,60 @@ const Login = () => {
   };
 
   return (
-    <>
-      <div className="container ">
-        <div className="card card-shadow col-lg-4 mx-auto login">
-          <div className="text-center text-dark">
-            <h2>Login</h2>
-          </div>
-          <div className="card-body">
-            <form onSubmit={handleOnsubmit}>
-              <input
+    <Container>
+      <Card className="card-shadow col-lg-4 mx-auto login">
+        <div className="text-center text-dark">
+          <h2>Login</h2>
+        </div>
+        <CardBody>
+          <Form onSubmit={handleOnsubmit}>
+            <FormGroup>
+              <Label for="email">Email</Label>
+              <Input
                 type="email"
-                placeholder="Introduzca el email"
                 name="email"
-                className="form-control my-2"
+                id="email"
+                placeholder="Introduzca el email"
                 onChange={handleOnChange}
-                autoFocus="autofocus"
+                autoFocus
                 required
               />
-              <input
+            </FormGroup>
+            <FormGroup>
+              <Label for="password">Password</Label>
+              <Input
                 type="password"
-                placeholder="Introduzca el password"
                 name="password"
-                className="form-control my-2"
+                id="password"
+                placeholder="Introduzca el password"
                 onChange={handleOnChange}
                 required
               />
-              {loading ? (
-                <div className="text-center my-2">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                </div>
-              ) : (
-                <button type="submit" className="btn btn-primary w-100">
-                  Iniciar sesión
-                </button>
-              )}
-            </form>
-            {dataErr ? (
-              <div className="alert alert-secondary py-1" role="alert">
-                {dataErr}
+            </FormGroup>
+            {loading ? (
+              <div className="text-center my-2">
+                <Spinner color="primary" />
               </div>
             ) : (
-              ""
+              <Button color="primary" block>
+                Iniciar sesión
+              </Button>
             )}
-            <p className="text-dark">
-              ¿No estas registrado?
-              <Link to="/registrar">
-                <span className="text-primary"> Registrate</span>
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
+          </Form>
+          {dataErr && (
+            <Alert color="secondary" className="py-1" role="alert">
+              {dataErr}
+            </Alert>
+          )}
+          <p className="text-dark">
+            ¿No estás registrado?{" "}
+            <Link to="/registrar" className="text-primary">
+              Registrate
+            </Link>
+          </p>
+        </CardBody>
+      </Card>
+    </Container>
   );
 };
 

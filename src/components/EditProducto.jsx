@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Form, Button, Spinner } from 'react-bootstrap';
+import { Card, Form, Button, Spinner } from 'reactstrap';
 
 const EditarProducto = (props) => {
   const [producto, setProducto] = useState({

@@ -1,14 +1,29 @@
-import { useState, useEffect } from "react";
-import React from "react";
-import {Button } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  Table,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Spinner,
+} from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faUserEdit,
-    } from "@fortawesome/free-solid-svg-icons";
+  faCity,
+  faPhone,
+  faUser,
+  faEnvelope as email,
+  faUserEdit,
+  faPlusSquare as add,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
-const Producto = (props) => {
-  const [productos, setProductos] = useState([]);
+const Marca = (props) => {
+  const navigate = useNavigate();
+  const [marcas, setMarcas] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,12 +31,11 @@ const Producto = (props) => {
     ConsultarDatos();
   }, []);
 
-  //Consultamos los datos de la tabla proveedores
-  const ConsultarDatos = () => {
+  const ConsultarDatos = async () => {
     const cookies = new Cookies();
     const token = cookies.get("token");
 
-    fetch(`http://localhost:8000/api/v1/productos`, {
+    await fetch(`http://localhost:8000/api/v1/marcas`, {
       method: "GET",
       headers: {
         Authorization: "bearer " + token.replace(/['"]+/g, ""),
@@ -31,67 +45,60 @@ const Producto = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setProductos(data);
-        setIsLoading(false); // Cambia isLoading a false
+        setMarcas(data);
+        setIsLoading(false);
         console.log(data);
       })
-      .catch((error) => setDataErr("Error"));
+      .catch((error) => setDataErr("No esta autorizado"));
   };
 
   return (
     <>
       <div className="container">
-        <div className="bg card card-shadow col-lg-12 mx-auto">
-          <div className="text-center">
-            <h3>Productos</h3>
-          </div>
-          <div className="card-body">
-            {isLoading ? ( // Mostrar "Cargando..." mientras isLoading es verdadero
+        <Card className="card-shadow col-lg-8 mx-auto">
+          <CardHeader className="text-center">
+            <h3>Marcas</h3>
+          </CardHeader>
+          <CardBody>
+            {isLoading ? (
               <div className="text-center my-2">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
+                <Spinner color="primary" />
               </div>
-            </div>
             ) : (
-              <table className="table table-striped">
+              <Table striped>
                 <thead>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Precio</th>
-                  <th>Imagen</th>
+                  <tr>
+                    <th>id</th>
+                    <th>Nombre</th>
+                  </tr>
                 </thead>
                 <tbody>
-                  {productos.map((e) => (
-                    <tr>
+                  {marcas.map((e) => (
+                    <tr key={e.id}>
+                      <td>{e.id}</td>
                       <td>{e.nombre}</td>
-                      <td>{e.descripcion}</td>
-                      <td>{e.precio}</td>
-                      <td>{e.imagen}</td>
                       <td>
+                      <Link to={`/editProducto/${e._id}`}>
                         <Button color="danger mx-1">
-                          <FontAwesomeIcon
-                            icon={faUserEdit}
-                            className="ml-0 text-white mx-auto"
-                          />
+                          <FontAwesomeIcon icon={faUserEdit} className="ml-0 text-white mx-auto" />
                         </Button>
+                      </Link>
                       </td>
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </Table>
             )}
-          </div>
-          {dataErr ? (
-            <div className="alert alert-secondary mt-2 py-2" role="alert">
-              {dataErr}
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
+            {dataErr && (
+              <div className="alert alert-secondary mt-2 py-2" role="alert">
+                {dataErr}
+              </div>
+            )}
+          </CardBody>
+        </Card>
       </div>
     </>
   );
 };
 
-export default Producto;
+export default Marca;

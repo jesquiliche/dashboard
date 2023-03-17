@@ -15,6 +15,7 @@ import Oferta from "../Oferta";
 import Provincia from "../Provincia";
 import Marca from "../Marca";
 import Logout from "../Logout";
+import EditProducto from "../EditProducto";
 
 const Content = ({ sidebarIsOpen, toggleSidebar }) => (
   <Container
@@ -83,6 +84,15 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
           element={
             <RequireAuth>
               <Marca />
+            </RequireAuth>
+          }
+          />
+          <Route
+          exact
+          path="/EditProducto"
+          element={
+            <RequireAuth>
+              <EditProducto />
             </RequireAuth>
           }
         />
