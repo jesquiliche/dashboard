@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import {
   Table,
   Button,
@@ -10,20 +9,18 @@ import {
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCity,
-  faPhone,
-  faUser,
+
   faEnvelope as email,
   faUserEdit,
-  faPlusSquare as add,
-  faSearch,
+  faPlusSquare as add
+
 } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Marca = (props) => {
   const navigate = useNavigate();
-  const [marcas, setMarcas] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,7 +32,7 @@ const Marca = (props) => {
     const cookies = new Cookies();
     const token = cookies.get("token");
 
-    await fetch(`http://localhost:8000/api/v1/marcas`, {
+    await fetch(`http://localhost:8000/api/v1/productos`, {
       method: "GET",
       headers: {
         Authorization: "bearer " + token.replace(/['"]+/g, ""),
@@ -45,7 +42,7 @@ const Marca = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setMarcas(data);
+        setProductos(data);
         setIsLoading(false);
         console.log(data);
       })
@@ -55,9 +52,9 @@ const Marca = (props) => {
   return (
     <>
       <div className="container">
-        <Card className="card-shadow col-lg-8 mx-auto">
+        <Card className="card-shadow col-lg-12 mx-auto">
           <CardHeader className="text-center">
-            <h3>Marcas</h3>
+            <h3>Productos</h3>
           </CardHeader>
           <CardBody>
             {isLoading ? (
@@ -73,16 +70,26 @@ const Marca = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {marcas.map((e) => (
+                  {productos.map((e) => (
                     <tr key={e.id}>
                       <td>{e.id}</td>
                       <td>{e.nombre}</td>
+                      <td>{e.precio}</td>
+                      <td>{e.iva_id}</td>
+
+                      <td>{e.categoria}</td>
+                      <td>{e.subcategoria}</td>
+                      <td>{e.subcategoria}</td>
+                      <td>{e.marca}</td>
+                      <td>{e.imagen}</td>
+
                       <td>
-                      <Link to={`/editProducto/${e._id}`}>
-                        <Button color="danger mx-1">
-                          <FontAwesomeIcon icon={faUserEdit} className="ml-0 text-white mx-auto" />
+                        <Button color="danger" className="mx-1">
+                          <FontAwesomeIcon
+                            icon={faUserEdit}
+                            className="ml-0 text-white mx-auto"
+                          />
                         </Button>
-                      </Link>
                       </td>
                     </tr>
                   ))}
