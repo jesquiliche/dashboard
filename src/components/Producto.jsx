@@ -1,22 +1,13 @@
 import { useState, useEffect } from "react";
 import React from "react";
-import { Table, Button } from "reactstrap";
+import {Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCity,
-  faPhone,
-  faUser,
-  faEnvelope as email,
-  faUserEdit,
-  faPlusSquare as add,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+    faUserEdit,
+    } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
 
-import { useNavigate } from "react-router-dom";
-
 const Producto = (props) => {
-  const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);

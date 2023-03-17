@@ -1,6 +1,5 @@
 import { useState } from "react";
 import React from "react";
-import Cookies from "universal-cookie";
 import { useParams } from "react-router-dom";
 
 const Register = (props) => {
@@ -30,9 +29,7 @@ const Register = (props) => {
 
   //Insertar en base de datos
   const InsertarDatos = async () => {
-    const cookies = new Cookies();
-
-    const data = await fetch("http://localhost:8000/api/register", {
+      const data = await fetch("http://localhost:8000/api/register", {
       method: "POST",
       body: JSON.stringify(datos), // data can be `string` or {object}!
       headers: {
@@ -43,9 +40,9 @@ const Register = (props) => {
 
     const response = await data.json();
     const statusCode = data.status;
-    console.log(statusCode);
+  
     let errorArray = [];
-    if(statusCode!=200) {
+    if(statusCode!==200) {
       
       for (const property in response) {
         errorArray.push(`${response[property]}`);

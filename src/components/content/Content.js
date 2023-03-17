@@ -7,7 +7,6 @@ import Login from "../login";
 import Register from "../Register";
 import Topbar from "./Topbar";
 import Tablero from "../Tablero";
-import Home from "../Home";
 import UserProvider from "../../context/UserProvider";
 import RequireAuth from "../RequireAuth";
 import Proveedor from "../Proveedor";
@@ -15,6 +14,7 @@ import Producto from "../Producto";
 import Oferta from "../Oferta";
 import Provincia from "../Provincia";
 import Marca from "../Marca";
+import Logout from "../Logout";
 
 const Content = ({ sidebarIsOpen, toggleSidebar }) => (
   <Container
@@ -28,7 +28,9 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
         <Route exact path="/Tablero" element={<Tablero />} />
         <Route exact path="/about" element={() => "About"} />
         <Route exact path="/Registrar" element={<Register />} />
+        <Route exact path="/Logout" element={<Logout />} />
         <Route exact path="/contact" element={() => "Contact"} />
+        
         <Route
           exact
           path="/Usuario"

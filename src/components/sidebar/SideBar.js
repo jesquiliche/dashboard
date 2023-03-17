@@ -74,6 +74,10 @@ const submenus = [
       title: "Registrar",
       target: "/Registrar",
     },
+    {
+      title: "Logout",
+      target: "/Logout",
+    },
   ],
   [
     {
