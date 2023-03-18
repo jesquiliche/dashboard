@@ -16,7 +16,7 @@ import {
 
 } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 const Marca = (props) => {
   const navigate = useNavigate();
@@ -84,12 +84,12 @@ const Marca = (props) => {
                       <td>{e.imagen}</td>
 
                       <td>
-                        <Button color="danger" className="mx-1">
-                          <FontAwesomeIcon
-                            icon={faUserEdit}
-                            className="ml-0 text-white mx-auto"
-                          />
-                        </Button>
+                        <Link to={`/editproducto/${e.id}`}>
+                          <Button color="danger mx-1">
+                            <FontAwesomeIcon icon={faUserEdit} className="ml-0 text-white mx-auto" />
+                          </Button>
+                       </Link>
+                      
                       </td>
                     </tr>
                   ))}

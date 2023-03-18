@@ -86,16 +86,18 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
               <Marca />
             </RequireAuth>
           }
-          />
+         />
+        
           <Route
           exact
-          path="/EditProducto"
+          path="/editproducto/:id"
           element={
-            <RequireAuth>
+            
               <EditProducto />
-            </RequireAuth>
+            
           }
         />
+      
       </Routes>
     </UserProvider>
   </Container>
