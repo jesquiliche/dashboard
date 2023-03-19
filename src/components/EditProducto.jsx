@@ -1,108 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Card, Form, Button, Spinner, Label } from "reactstrap";
+import { obtenerProducto,
+  obtenerSubcategorias,
+  obtenerMarcas,
+  obtenerIvas } from "../services/APIGets";
 
 const EditProducto = (props) => {
+
   const { id } = useParams();
 
-  const [producto, setProducto] = useState({
-    precio: "",
-    nombre: "",
-    descripcion: "",
-    subcategoria_id: "",
-    iva_id: "",
-    marca_id: "",
-  });
-
+  const [producto, setProducto] = useState({});
   const [subcategorias,setSubcategorias]=useState([]);
   const [marcas,setMarcas]=useState([]);
   const [ivas,setIvas]=useState([]);
- 
+  const [error,setError]=useState(null);
 
   const [cargando, setCargando] = useState(false);
 
-  const obtenerProducto = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/v1/productos/${id}`
-      );
-      console.log(response);
-      const data = await response.json();
+  useEffect(() => {
     
-      setProducto(data);
-    } catch (error) {
-      
+    const cargarDatos = async ()=>{
+      setCargando(true);
+      await obtenerProducto(id, setProducto, setError);
+      await obtenerSubcategorias(setSubcategorias, setError);
+      await obtenerMarcas(setMarcas, setError);
+      await obtenerIvas(setIvas, setError);
+      setCargando(false);
+    };
     
-    }
-  };
-
-  const obtenerSubcategorias = async () => {
-    try {
-      
-      const response = await fetch(
-        `http://localhost:8000/api/v1/subcategorias`
-      );
-      
-      const data = await response.json();
-      
-      setSubcategorias(data);
-    
-      
-    } catch (error) {
-      console.error(error);
-    
-    }
-  };
-
-  const obtenerMarcas = async () => {
-    try {
-      
-      const response = await fetch(
-        `http://localhost:8000/api/v1/marcas`
-      );
-      
-      const data = await response.json();
-      console.log(data);
-      setMarcas(data);
-      console.log(marcas);
-    
-    } catch (error) {
-      alert(error);
-      console.error(error);
-    }
-  };
-
-  const obtenerIvas = async () => {
-    try {
-      
-      const response = await fetch(
-        "http://localhost:8000/api/v1/ivas"
-      );
-      
-      const data = await response.json();
-    
-      console.log(data);
-    
-      setIvas(data);
-
-    
-    } catch (error) {
-      alert(error);
-      console.error(error);
-    }
-  };
-
-
-
-
-  useEffect(async () => {
-    setCargando(true);
-    await obtenerProducto();
-    await obtenerSubcategorias();
-   await obtenerMarcas();
-    await obtenerIvas();
-    setCargando(false);
-  }, []);
+    cargarDatos();
+       
+  }, []);;
 
   return (
     <>
