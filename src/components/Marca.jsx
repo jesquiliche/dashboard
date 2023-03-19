@@ -9,17 +9,10 @@ import {
   Spinner,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCity,
-  faPhone,
-  faUser,
-  faEnvelope as email,
-  faUserEdit,
-  faPlusSquare as add,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
+import { obtenerMarcas } from "../services/APIGets";
 
 const Marca = (props) => {
   const navigate = useNavigate();
@@ -28,10 +21,15 @@ const Marca = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ConsultarDatos();
+    const cargaDatos=async ()=>{
+    setIsLoading(true);
+    await obtenerMarcas(setMarcas,setDataErr);
+    setIsLoading(false);
+    };
+    cargaDatos();
   }, []);
 
-  const ConsultarDatos = async () => {
+ /* const ConsultarDatos = async () => {
     const cookies = new Cookies();
     const token = cookies.get("token");
 
@@ -50,7 +48,7 @@ const Marca = (props) => {
         console.log(data);
       })
       .catch((error) => setDataErr("No esta autorizado"));
-  };
+  };*/
 
   return (
     <>

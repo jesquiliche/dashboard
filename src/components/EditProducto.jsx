@@ -45,6 +45,8 @@ const EditProducto = (props) => {
          <Spinner color="primary" />
        </div>)
         :("")}
+        
+      <h1>{error ? error.message:""}</h1>
     </div>
 
     <div className="card-body">
