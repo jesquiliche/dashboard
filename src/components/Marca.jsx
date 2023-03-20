@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
-import { obtenerMarcas } from "../services/APIGets";
+import { getFetchData } from "../services/APIGets";
 
 const Marca = (props) => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Marca = (props) => {
   useEffect(() => {
     const cargaDatos=async ()=>{
     setIsLoading(true);
-    await obtenerMarcas(setMarcas,setDataErr);
+    await getFetchData("http://localhost:8000/api/v1/marcas",setMarcas,setDataErr);
     setIsLoading(false);
     };
     cargaDatos();

@@ -9,18 +9,14 @@ import {
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-
-  faEnvelope as email,
-  faUserEdit,
-  faPlusSquare as add
-
+  
+  faUserEdit
+  
 } from "@fortawesome/free-solid-svg-icons";
-import Cookies from "universal-cookie";
-import { useNavigate,Link } from "react-router-dom";
-import { obtenerProductos } from "../services/APIGets";
+import { Link } from "react-router-dom";
+import { obtenerProductos,getFetchData } from "../services/APIGets";
 
 const Producto = (props) => {
-  const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -28,32 +24,11 @@ const Producto = (props) => {
   useEffect(() => {
     const cargarDatos = async ()=>{
       setIsLoading(true);
-      await obtenerProductos(setProductos, setDataErr);
+      await getFetchData("http://localhost:8000/api/v1/productos",setProductos, setDataErr);
       setIsLoading(false);
     };
     cargarDatos()
   }, []);
-
-/*  const ConsultarDatos = async () => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-
-    await fetch(`http://localhost:8000/api/v1/productos`, {
-      method: "GET",
-      headers: {
-        Authorization: "bearer " + token.replace(/['"]+/g, ""),
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setProductos(data);
-        setIsLoading(false);
-        console.log(data);
-      })
-      .catch((error) => setDataErr("No esta autorizado"));
-  };*/
 
   return (
     <>
@@ -70,7 +45,6 @@ const Producto = (props) => {
             ) : (
               
               <Table striped>
-                <h1>Entro</h1>
                 <thead>
                   <tr>
                     <th>id</th>

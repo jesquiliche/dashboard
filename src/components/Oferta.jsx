@@ -3,48 +3,32 @@ import React from "react";
 import { Table, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCity,
-  faPhone,
-  faUser,
-  faEnvelope as email,
-  faUserEdit,
-  faPlusSquare as add,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import Cookies from "universal-cookie";
 
-import { useNavigate } from "react-router-dom";
+  
+  faUserEdit
+
+} from "@fortawesome/free-solid-svg-icons";
+import { getFetchData } from "../services/APIGets";
+
+
 
 const Oferta = (props) => {
-  const navigate = useNavigate();
+  
   const [ofertas, setOfertas] = useState([]);
   const [dataErr, setDataErr] = useState();
+  const [isLoading,setIsLoading]=useState(false);
 
   useEffect(() => {
-    ConsultarDatos();
+    const cargarDatos = async ()=>{
+      setIsLoading(true);
+      await getFetchData("http://localhost:8000/api/v1/ofertas",
+      setOfertas, setDataErr);
+      setIsLoading(false);
+    };
+    cargarDatos();
   }, []);
 
-  //Consultamos los datos de la tabla proveedores
-  const ConsultarDatos = () => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-
-    fetch(`http://localhost:8000/api/v1/ofertas`, {
-      method: "GET",
-      headers: {
-        Authorization: "bearer " + token.replace(/['"]+/g, ""),
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setOfertas(data);
-        console.log(data);
-      })
-      .catch((error) => setDataErr("No esta autorizado"));
-  };
-
+  
   return (
     <>
       <div className="container">

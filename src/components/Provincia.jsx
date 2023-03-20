@@ -2,12 +2,8 @@ import { useState, useEffect } from "react";
 import React from "react";
 import {  Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-   faEnvelope as email,
-  faUserEdit,
-  faPlusSquare as add
-} from "@fortawesome/free-solid-svg-icons";
-import Cookies from "universal-cookie";
+import {  faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { getFetchData } from "../services/APIGets";
 
 
 const Poblacion = (props) => {
@@ -16,35 +12,15 @@ const Poblacion = (props) => {
   const [dataErr, setDataErr] = useState();
 
   useEffect(() => {
-    ConsultarDatos();
+    const cargarDatos = async ()=>{
+      setIsLoading(true);
+      await getFetchData("http://localhost:8000/api/v1/provincias",
+      setProvincias, setDataErr);
+      setIsLoading(false);
+    };
+    cargarDatos();
   }, []);
 
-  //Consultamos los datos de la tabla proveedores
-  const ConsultarDatos = async () => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-
-    setIsLoading(true);
-
-    await fetch(`http://localhost:8000/api/v1/provincias`, {
-      method: "GET",
-      headers: {
-        Authorization: "bearer " + token.replace(/['"]+/g, ""),
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setProvincias(data);
-        setIsLoading(false);
-        console.log(data);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        setDataErr("No esta autorizado");
-      });
-  };
 
   return (
     <>
@@ -62,6 +38,7 @@ const Poblacion = (props) => {
            </div>
             ) : (
               <table className="table table-striped">
+                
                 <thead>
                   <th>Código</th>
                   <th>Nombre</th>

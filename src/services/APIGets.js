@@ -8,35 +8,11 @@ export const obtenerProducto = async (id, setProducto, setError) => {
 
 };
 
-export const obtenerProductos = async (setProductos, setError) => {
-  const url=`http://localhost:8000/api/v1/productos`;
+export const getFetchData = async (url,setData, setError) => {
   const res=await fetchData(url, setError);
   const data=await res.json();
-
-  setProductos(data);    
-
+  setData(data);    
 };
-
-export const obtenerSubcategorias = async (setSubcategorias, setError) => {
-  const url=`http://localhost:8000/api/v1/subcategorias`;
-  const response=await fetchData(url, setError);
-  const data=await response.json();
-  setSubcategorias(data);
- };
-
-export const obtenerMarcas = async (setMarcas, setError) => {
-  const url=`http://localhost:8000/api/v1/marcas`
-  const response=await fetchData(url, setError);
-  const data=await response.json();
-  setMarcas(data);
-};
-
-export const obtenerIvas = async (setIvas, setError) => {
-  const url="http://localhost:8000/api/v1/ivas"
-  const response=await fetchData(url,setError);
-  const data=await response.json();
-  setIvas(data);
- };
 
 export const handleError = (error) => {
   if (error instanceof TypeError) {
