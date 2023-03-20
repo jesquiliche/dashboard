@@ -30,6 +30,10 @@ const EditProducto = (props) => {
     cargarDatos();
   }, []);
 
+ 
+
+  
+
   return (
     <>
       <div className="card col-md-8 mx-auto">
@@ -76,18 +80,32 @@ const EditProducto = (props) => {
                 </div>
 
                 <div className="form-floating py-1">
-                  <select className="form-select" name="marca_id">
-                    {ivas.map((iva) => (
-                      <option key={iva.id} value={iva.id}>
-                        {iva.nombre}
-                      </option>
-                    ))}
+                  <select className="form-select" name="iva_id" value={producto.iva_id}>
+                    
+                  
+                     {ivas.map((iva) => (
+                     
+                      (<option key={iva.id} value={iva.id}
+                  
+                      >
+                        
+                        {iva.nombre};
+                      
+                    
+                      </option>)
+                      
+                      ))}
+                      
+                   
+                    
                   </select>
-                  <label for="marca_id">Marca</label>
+                   
+                  <label for="iva_id">IVA</label>
                 </div>
 
                 <div className="form-floating py-1">
-                  <select className="form-select" name="subcategoria_id">
+                  <select className="form-select" name="subcategoria_id" 
+                  value={producto.subcategoria_id}>
                     {subcategorias.map((subcategoria) => (
                       <option key={subcategoria.id} value={subcategoria.id}>
                         {subcategoria.nombre}
@@ -112,7 +130,8 @@ const EditProducto = (props) => {
                 </div>
 
                 <div className="form-floating py-1">
-                  <select className="form-select" name="marca_id">
+                  <select className="form-select" name="marca_id"
+                    value={producto.marca_id}>
                     {marcas.map((marca) => (
                       <option key={marca.id} value={marca.id}>
                         {marca.nombre}
