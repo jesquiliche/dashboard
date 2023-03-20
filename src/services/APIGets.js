@@ -8,6 +8,15 @@ export const obtenerProducto = async (id, setProducto, setError) => {
 
 };
 
+export const obtenerProductos = async (setProductos, setError) => {
+  const url=`http://localhost:8000/api/v1/productos`;
+  const res=await fetchData(url, setError);
+  const data=await res.json();
+
+  setProductos(data);    
+
+};
+
 export const obtenerSubcategorias = async (setSubcategorias, setError) => {
   const url=`http://localhost:8000/api/v1/subcategorias`;
   const response=await fetchData(url, setError);

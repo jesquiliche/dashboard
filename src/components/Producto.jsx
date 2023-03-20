@@ -17,18 +17,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
 import { useNavigate,Link } from "react-router-dom";
+import { obtenerProductos } from "../services/APIGets";
 
-const Marca = (props) => {
+const Producto = (props) => {
   const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ConsultarDatos();
+    const cargarDatos = async ()=>{
+      setIsLoading(true);
+      await obtenerProductos(setProductos, setDataErr);
+      setIsLoading(false);
+    };
+    cargarDatos()
   }, []);
 
-  const ConsultarDatos = async () => {
+/*  const ConsultarDatos = async () => {
     const cookies = new Cookies();
     const token = cookies.get("token");
 
@@ -47,7 +53,7 @@ const Marca = (props) => {
         console.log(data);
       })
       .catch((error) => setDataErr("No esta autorizado"));
-  };
+  };*/
 
   return (
     <>
@@ -62,7 +68,9 @@ const Marca = (props) => {
                 <Spinner color="primary" />
               </div>
             ) : (
+              
               <Table striped>
+                <h1>Entro</h1>
                 <thead>
                   <tr>
                     <th>id</th>
@@ -100,7 +108,7 @@ const Marca = (props) => {
               <div className="alert alert-secondary mt-2 py-2" role="alert">
                 {dataErr}
               </div>
-            )}
+          )} 
           </CardBody>
         </Card>
       </div>
@@ -108,4 +116,4 @@ const Marca = (props) => {
   );
 };
 
-export default Marca;
+export default Producto;
