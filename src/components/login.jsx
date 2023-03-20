@@ -58,7 +58,8 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(response.status)
+        alert("Entro");
+        alert(response.message)
         throw new Error("Credenciales no válidas");
       }
 

@@ -1,83 +1,35 @@
 import Cookies from "universal-cookie";
 
 export const obtenerProducto = async (id, setProducto, setError) => {
-  try {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-    const options = getFetchOptions(token);
+    const url=`http://localhost:8000/api/v1/productos/${id}`;
+    const res=await fetchData(url, setError);
+    const data=await res.json();
+    setProducto(data);    
 
-    const response = await fetch(
-      `http://localhost:8000/api/v1/productos/${id}`,
-      options
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    setProducto(data);
-  } catch (error) {
-    setError(error);
-  }
 };
+
 export const obtenerSubcategorias = async (setSubcategorias, setError) => {
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-  const options = getFetchOptions(token);
-
-  try {
-    const response = await fetch(
-      `http://localhost:8000/api/v1/subcategorias`,
-      options
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    setSubcategorias(data);
-  } catch (error) {
-    setError(error);
-  }
-};
+  const url=`http://localhost:8000/api/v1/subcategorias`;
+  const response=await fetchData(url, setError);
+  const data=await response.json();
+  setSubcategorias(data);
+ };
 
 export const obtenerMarcas = async (setMarcas, setError) => {
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-  const options = getFetchOptions(token);
-
-  try {
-    const response = await fetch(
-      `http://localhost:8000/api/v1/marcas`,
-      options
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    setMarcas(data);
-  } catch (error) {
-    setError(error);
-  }
+  const url=`http://localhost:8000/api/v1/marcas`
+  const response=await fetchData(url, setError);
+  const data=await response.json();
+  setMarcas(data);
 };
 
 export const obtenerIvas = async (setIvas, setError) => {
-  try {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-    const options = getFetchOptions(token);
+  const url="http://localhost:8000/api/v1/ivas"
+  const response=await fetchData(url,setError);
+  const data=await response.json();
+  setIvas(data);
+ };
 
-    const response = await fetch("http://localhost:8000/api/v1/ivas", options);
-    if (!response.ok) {
-      console.log(response.status);
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    setIvas(data);
-  } catch (error) {
-    setError(handleError(error));
-  }
-};
-
-const handleError = (error) => {
+export const handleError = (error) => {
   if (error instanceof TypeError) {
     return new Error(`Error de red: ${error.message}`);
   } else if (
@@ -134,4 +86,18 @@ const getFetchOptions = (token) => {
     method: "GET",
     headers,
   };
+};
+
+
+const fetchData = async (url, method = "GET", data = null) => {
+  try{
+    const cookies = new Cookies();
+    const token = cookies.get("token");
+    const options=getFetchOptions(token);
+    const response = await fetch(url, options);
+    const result = await handleError(response);
+    return result;
+  }catch(error){
+    alert(error);
+  }
 };
