@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
-import {  obtenerProducto,getFetchData} from "../services/APIGets";
+import { obtenerProducto, getFetchData } from "../services/APIGets";
+import ListItems from "./utils/ListItems";
+import TextField from "./utils/TextField";
 
 const EditProducto = (props) => {
   const { id } = useParams();
 
   const [producto, setProducto] = useState({});
   const [subcategorias, setSubcategorias] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [ivas, setIvas] = useState([]);
   const [error, setError] = useState(null);
@@ -18,25 +21,44 @@ const EditProducto = (props) => {
     const cargarDatos = async () => {
       setCargando(true);
       await obtenerProducto(id, setProducto, setError);
-      await getFetchData("http://localhost:8000/api/v1/subcategorias",
-        setSubcategorias, setError);
-      await getFetchData("http://localhost:8000/api/v1/marcas",
-        setMarcas, setError);
-      await getFetchData("http://localhost:8000/api/v1/ivas",
-        setIvas, setError);
+      await getFetchData(
+        "http://localhost:8000/api/v1/subcategorias",
+        setSubcategorias,
+        setError
+      );
+      await getFetchData(
+        "http://localhost:8000/api/v1/marcas",
+        setMarcas,
+        setError
+      );
+      await getFetchData(
+        "http://localhost:8000/api/v1/ivas",
+        setIvas,
+        setError
+      );
+      await getFetchData(
+        "http://localhost:8000/api/v1/categorias",
+        setCategorias,
+        setError
+      );
       setCargando(false);
     };
 
     cargarDatos();
   }, []);
 
- 
+  const handleOnChange = (e) => {
+    setProducto({
+      ...producto,
+      [e.target.name]: e.target.value,
+    });
 
-  
+    console.log(e.target.value);
+  };
 
   return (
     <>
-      <div className="card col-md-8 mx-auto">
+      <div className="card col-md-12 mx-auto">
         <div className="card-header text-center">
           <h3>Producto</h3>
 
@@ -48,24 +70,18 @@ const EditProducto = (props) => {
             ""
           )}
 
-          <h1>{error ? error.message : ""}</h1>
+          <h5>{error ? error.message : ""}</h5>
         </div>
 
         <div className="card-body">
           <form>
             <div className="row">
               <div className="col-md-6">
-                <div className="form-floating py-1">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="nombre"
-                    name="nombre"
-                    placeholder="Nombre"
-                    value={producto.nombre}
-                  />
-                  <label for="nombre">Nombre</label>
-                </div>
+                <TextField
+                  name="nombre"
+                  placeholder="Introduzca el nombre"
+                  value={producto.nombre}
+                ></TextField>
 
                 <div className="form-floating py-1">
                   <textarea
@@ -73,6 +89,7 @@ const EditProducto = (props) => {
                     id="descripcion"
                     name="descripcion"
                     placeholder="Descripción"
+                    rows="5"
                   >
                     {producto.descripcion}
                   </textarea>
@@ -80,68 +97,51 @@ const EditProducto = (props) => {
                 </div>
 
                 <div className="form-floating py-1">
-                  <select className="form-select" name="iva_id" value={producto.iva_id}>
-                    
-                  
-                     {ivas.map((iva) => (
-                     
-                      (<option key={iva.id} value={iva.id}
-                  
-                      >
-                        
-                        {iva.nombre};
-                      
-                    
-                      </option>)
-                      
-                      ))}
-                      
-                   
-                    
-                  </select>
-                   
+                  <ListItems
+                    data={ivas}
+                    name="iva_id"
+                    value={producto.iva_id}
+                    onChange={handleOnChange}
+                  />
+
                   <label for="iva_id">IVA</label>
                 </div>
 
                 <div className="form-floating py-1">
-                  <select className="form-select" name="subcategoria_id" 
-                  value={producto.subcategoria_id}>
-                    {subcategorias.map((subcategoria) => (
-                      <option key={subcategoria.id} value={subcategoria.id}>
-                        {subcategoria.nombre}
-                      </option>
-                    ))}
-                  </select>
+                  <ListItems
+                    data={subcategorias}
+                    name="subcategoria_id"
+                    value={producto.subcategoria_id}
+                    onChange={handleOnChange}
+                  />
+
                   <label for="subcategoria_id">Subcategoria</label>
                 </div>
               </div>
 
               <div className="col-md-6">
                 <div className="form-floating py-1">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="categoria"
-                    name="categoria"
-                    placeholder="Categoría"
-                    value={producto.subcategoria}
+                  <ListItems
+                    data={categorias}
+                    name="categoria_id"
+                    value={producto.categoria_id}
+                    onChange={handleOnChange}
                   />
                   <label for="Categoria">Categoría</label>
                 </div>
 
                 <div className="form-floating py-1">
-                  <select className="form-select" name="marca_id"
-                    value={producto.marca_id}>
-                    {marcas.map((marca) => (
-                      <option key={marca.id} value={marca.id}>
-                        {marca.nombre}
-                      </option>
-                    ))}
-                  </select>
+                  <ListItems
+                    data={marcas}
+                    name="marca_id"
+                    value={producto.marca_id}
+                    onChange={handleOnChange}
+                  />
+
                   <label for="marca_id">Marca</label>
                 </div>
 
-                <div className="form-floating py-1">
+                {/*   <div className="form-floating py-1">
                   <input
                     type="text"
                     className="form-control"
@@ -151,7 +151,7 @@ const EditProducto = (props) => {
                     value="fee_786_587_png.webp"
                   />
                   <label for="imagen">Imagen</label>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="text-center mx-auto mt-2">
