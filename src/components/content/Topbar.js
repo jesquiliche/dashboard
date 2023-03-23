@@ -30,10 +30,10 @@ const Topbar = ({ toggleSidebar }) => {
       <Button color="info" onClick={toggleSidebar}>
         <FontAwesomeIcon icon={faAlignLeft} />
       </Button>
-      )
+      
       <h2>
         <span>
-          <b className="text-primary">ECOMMERCE</b>
+          <b className="text-primary"> ECOMMERCE</b>
         </span>
         <i> Manager</i>
       </h2>

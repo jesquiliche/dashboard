@@ -1,16 +1,19 @@
-import React from 'react'
 
-function TextField({name,placeholder,value}) {
+
+function TextField({name,placeholder,value,required=true,onChange}) {
+  
   return (
     
-    <div className="form-floating py-1">
+    <div className="form-floating my-2 py-2">
         <input
             type="text"
             className="form-control"
             id={name}
             name={name}
             placeholder={placeholder}
-            value={value}
+            value={value}  
+            required={required}
+            onChange={onChange}
         />
         <label for="nombre">{name}</label>
     </div>

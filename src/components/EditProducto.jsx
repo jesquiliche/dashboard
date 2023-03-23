@@ -2,40 +2,45 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import { obtenerProducto, getFetchData } from "../services/APIGets";
+import { putFetchData } from "../services/APIPuts";
 import ListItems from "./utils/ListItems";
 import TextField from "./utils/TextField";
 
 const EditProducto = (props) => {
   const { id } = useParams();
-
   const [producto, setProducto] = useState({});
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [ivas, setIvas] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState([]);
 
   const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
     const cargarDatos = async () => {
       setCargando(true);
+
       await obtenerProducto(id, setProducto, setError);
+
       await getFetchData(
         "http://localhost:8000/api/v1/subcategorias",
         setSubcategorias,
         setError
       );
+
       await getFetchData(
         "http://localhost:8000/api/v1/marcas",
         setMarcas,
         setError
       );
+
       await getFetchData(
         "http://localhost:8000/api/v1/ivas",
         setIvas,
         setError
       );
+
       await getFetchData(
         "http://localhost:8000/api/v1/categorias",
         setCategorias,
@@ -47,6 +52,11 @@ const EditProducto = (props) => {
     cargarDatos();
   }, []);
 
+  const handleOnSubmit = (event) => {
+    event.preventDefault();
+    actualizarProducto(producto);
+  };
+
   const handleOnChange = (e) => {
     setProducto({
       ...producto,
@@ -54,6 +64,34 @@ const EditProducto = (props) => {
     });
 
     console.log(e.target.value);
+  };
+
+  const actualizarProducto = async (producto) => {
+    setCargando(true);
+    const url = `http://localhost:8000/api/v1/productos/${id}`;
+
+    // putFetchData(url, producto);
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/v1/productos/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(producto),
+        }
+      );
+      if (response.ok) {
+        // Si la actualización es exitosa, redirigir a la página de detalle del producto
+        // props.history.push(`/productos/${id}`);
+      } else {
+        throw new Error("No se pudo actualizar el producto");
+      }
+    } catch (error) {
+      setError(error);
+    }
+    setCargando(false);
   };
 
   return (
@@ -74,13 +112,14 @@ const EditProducto = (props) => {
         </div>
 
         <div className="card-body">
-          <form>
+          <form onSubmit={handleOnSubmit}>
             <div className="row">
               <div className="col-md-6">
                 <TextField
                   name="nombre"
                   placeholder="Introduzca el nombre"
                   value={producto.nombre}
+                  onChange={handleOnChange}
                 ></TextField>
 
                 <div className="form-floating py-1">
@@ -89,7 +128,9 @@ const EditProducto = (props) => {
                     id="descripcion"
                     name="descripcion"
                     placeholder="Descripción"
-                    rows="5"
+                    value={producto.descripcion}
+                    onChange={handleOnChange}
+                    rows="10"
                   >
                     {producto.descripcion}
                   </textarea>
@@ -140,18 +181,6 @@ const EditProducto = (props) => {
 
                   <label for="marca_id">Marca</label>
                 </div>
-
-                {/*   <div className="form-floating py-1">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="imagen"
-                    name="imagen"
-                    placeholder="Imagen"
-                    value="fee_786_587_png.webp"
-                  />
-                  <label for="imagen">Imagen</label>
-                </div> */}
               </div>
             </div>
             <div className="text-center mx-auto mt-2">
