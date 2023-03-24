@@ -6,15 +6,20 @@ import { putFetchData } from "../services/APIPuts";
 import ListItems from "./utils/ListItems";
 import TextField from "./utils/TextField";
 import NumberField from "./utils/NumberField";
+import { useNavigate } from "react-router-dom";
+import { createBrowserHistory } from 'history';
 
 const EditProducto = (props) => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const history = createBrowserHistory();
   const [producto, setProducto] = useState({});
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [ivas, setIvas] = useState([]);
   const [error, setError] = useState([]);
+  
 
   const [cargando, setCargando] = useState(false);
 
@@ -85,8 +90,10 @@ const EditProducto = (props) => {
       );
       if (response.ok) {
         // Si la actualización es exitosa, redirigir a la página de detalle del producto
-        // props.history.push(`/productos/${id}`);
+        sessionStorage.setItem("productoActualizado", true);
+        navigate('/Producto');
       } else {
+        alert(response.status);
         throw new Error("No se pudo actualizar el producto");
       }
     } catch (error) {
