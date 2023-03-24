@@ -74,7 +74,7 @@ const getFetchOptions = (token) => {
 };
 
 
-const fetchData = async (url, method = "GET", data = null) => {
+const fetchData = async (url, setError) => {
   try{
     const cookies = new Cookies();
     const token = cookies.get("token");
@@ -83,6 +83,6 @@ const fetchData = async (url, method = "GET", data = null) => {
     const result = await handleError(response);
     return result;
   }catch(error){
-    alert(error);
+    setError("No se pudo conectar con el servidor");
   }
 };

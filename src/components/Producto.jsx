@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash,faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { deleteFetchData } from "../services/APIDeletes";
 import { getFetchData } from "../services/APIGets";
@@ -23,11 +23,19 @@ const Producto = (props) => {
 
   useEffect(() => {
     const cargarDatos = async ()=>{
-      setIsLoading(true);
-      await getFetchData("http://localhost:8000/api/v1/productos",setProductos, setDataErr);
-      setIsLoading(false);
+      
+      try{
+        setIsLoading(true);
+        await getFetchData("http://localhost:8000/api/v1/productos",setProductos, setDataErr);
+        setIsLoading(false);
+      } catch(error){
+        setIsLoading(false);
+      }
+      
     };
     cargarDatos()
+  
+    
   }, []);
 
   const handleDelete = async (id) => {
@@ -49,14 +57,23 @@ const Producto = (props) => {
           <CardHeader className="text-center">
             <h3>Productos</h3>
           </CardHeader>
+          <Link to={`/addproducto`}>
+            <Button color="primary mx-1 my-2 mx-3">
+                <FontAwesomeIcon icon={faPlus} className="ml-0 text-white mx-auto" />
+            </Button>
+          </Link>
           <CardBody>
             {isLoading ? (
               <div className="text-center my-2">
                 <Spinner color="primary" />
+                 
               </div>
             ) : (
+            
               
               <Table striped className= "col-md-10 col-lg-12 col-sm-4 mx-auto">
+                  
+              
                 <thead>
                   <tr>
                     <th className="col-md-1 col-sm-1 col-md-1 col-lg-1">id</th>
@@ -92,9 +109,11 @@ const Producto = (props) => {
               </Table>
             )}
             {dataErr && (
-              <div className="alert alert-secondary mt-2 py-2" role="alert">
-                {dataErr}
+              <div className="alert alert-warning mt-2 mx-auto col-lg-6php  py-2" role="alert">
+                <h6 className="text-danger text-center">{dataErr}</h6>
+              
               </div>
+             
           )} 
           </CardBody>
         </Card>

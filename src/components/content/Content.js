@@ -16,6 +16,7 @@ import Provincia from "../Provincia";
 import Marca from "../Marca";
 import Logout from "../Logout";
 import EditProducto from "../EditProducto";
+import AddProducto from "../AddProducto";
 
 const Content = ({ sidebarIsOpen, toggleSidebar }) => (
   <Container
@@ -94,6 +95,15 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
           element={
             
               <EditProducto />
+            
+          }
+        />
+        <Route
+          exact
+          path="/addproducto"
+          element={
+            
+              <AddProducto />
             
           }
         />

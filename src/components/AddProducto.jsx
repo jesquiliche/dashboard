@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
-import { obtenerProducto, getFetchData } from "../services/APIGets";
-import { putFetchData } from "../services/APIPuts";
+import { getFetchData } from "../services/APIGets";
 import ListItems from "./utils/ListItems";
 import TextField from "./utils/TextField";
 import NumberField from "./utils/NumberField";
+import Cookies from "universal-cookie";
 
-const EditProducto = (props) => {
-  const { id } = useParams();
-  const [producto, setProducto] = useState({});
+const AddProducto = (props) => {
+
+  const [producto, setProducto] = useState(
+    {
+      precio:0,
+      nombre:"",
+      descripcion:"",
+      subcategoria_id:1,
+      iva_id:1,
+      marca_id:1
+    });
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
@@ -21,9 +28,6 @@ const EditProducto = (props) => {
   useEffect(() => {
     const cargarDatos = async () => {
       setCargando(true);
-
-      await obtenerProducto(id, setProducto, setError);
-
       await getFetchData(
         "http://localhost:8000/api/v1/subcategorias",
         setSubcategorias,
@@ -55,7 +59,7 @@ const EditProducto = (props) => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    actualizarProducto(producto);
+    agregarProducto(producto);
   };
 
   const handleOnChange = (e) => {
@@ -64,37 +68,41 @@ const EditProducto = (props) => {
       [e.target.name]: e.target.value,
     });
 
-    console.log(e.target.value);
+    
   };
 
-  const actualizarProducto = async (producto) => {
+  const agregarProducto = async (producto) => {
     setCargando(true);
-    const url = `http://localhost:8000/api/v1/productos/${id}`;
-
-    // putFetchData(url, producto);
+    const url = `http://localhost:8000/api/v1/productos`;
+  
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/v1/productos/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(producto),
-        }
-      );
+      const cookies = new Cookies();
+      const token = cookies.get('token'); // Obtenemos el token almacenado en la cookie
+  
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Agregamos el token al header del fetch
+        },
+        body: JSON.stringify(producto),
+      });
+  
       if (response.ok) {
         // Si la actualización es exitosa, redirigir a la página de detalle del producto
         // props.history.push(`/productos/${id}`);
       } else {
-        throw new Error("No se pudo actualizar el producto");
+        alert(response.status);
+        console.log(producto);
+        throw new Error();
       }
     } catch (error) {
-      setError("No se pudo conectar con el servidor");
+      alert(error);
+      setError('No se pudo conectar con el servidor');
     }
+  
     setCargando(false);
   };
-
   return (
     <>
       <div className="card col-md-12 mx-auto">
@@ -132,6 +140,7 @@ const EditProducto = (props) => {
                     value={producto.descripcion}
                     onChange={handleOnChange}
                     rows="10"
+                    required
                   >
                     {producto.descripcion}
                   </textarea>
@@ -202,4 +211,4 @@ const EditProducto = (props) => {
   );
 };
 
-export default EditProducto;
+export default AddProducto;

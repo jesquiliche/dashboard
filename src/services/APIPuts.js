@@ -49,49 +49,36 @@ export const handleError = (error) => {
 };
 
 export const putFetchData = async (url, data) => {
-  const token=null;
   try {
-    console.log("entro");
-    console.log(data);
-    const response = await fetch(url, putFetchOptions(token,data));
-     
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    alert (error);
-    console.error('Error al hacer PUT:', error);
-    throw error;
+    throw handleError(error);
   }
 };
 
 
-const putFetchOptions = async (token,data) => {
-  const options = {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  };
-  console.log(options);
-  if (token) {
-    options.headers.Authorization = `bearer ${token.replace(/['"]+/g, "")}`;
-  }
-  alert(options);
-  return options;
-
-};
 
 
-const fetchData = async (url, method = "PUT", data = null) => {
+/*const fetchData = async (url, method = "PUT", data = null) => {
   try{
     const cookies = new Cookies();
     const token = cookies.get("token");
-    const options=putFetchOptions(token,data);
-    const response = await fetch(url, options);
+ //   const options=putFetchOptions(token,data);
+   // const response = await fetch(url, options);
     const result = await handleError(response);
     return result;
   }catch(error){
     alert(error);
   }
-};
+}*/;
