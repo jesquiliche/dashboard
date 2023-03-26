@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import {  Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import {  faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { getFetchData } from "../services/APIGets";
 
 
@@ -16,12 +16,23 @@ const Poblacion = (props) => {
       setIsLoading(true);
       await getFetchData("http://localhost:8000/api/v1/provincias",
       setProvincias, setDataErr);
+     // setProvincias(data);
       setIsLoading(false);
     };
-    cargarDatos();
+    try{
+    
+      cargarDatos();
+    
+    }
+     catch(error){
+      setIsLoading(false);
+      alert(error);
+    }
+   
+    
   }, []);
 
-
+  
   return (
     <>
       <div className="container">
@@ -42,20 +53,14 @@ const Poblacion = (props) => {
                 <thead>
                   <th>Código</th>
                   <th>Nombre</th>
+                  <th></th>
                 </thead>
                 <tbody>
                   {provincias.map((e) => (
                     <tr>
                       <td>{e.codigo}</td>
                       <td>{e.nombre}</td>
-                      <td>
-                        <Button color="danger mx-1">
-                          <FontAwesomeIcon
-                            icon={faUserEdit}
-                            className="ml-0 text-white mx-auto"
-                          />
-                        </Button>
-                      </td>
+                  
                     </tr>
                   ))}
                 </tbody>

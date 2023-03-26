@@ -9,10 +9,10 @@ import {
   Spinner,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
-import Cookies from "universal-cookie";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { getFetchData } from "../services/APIGets";
+import { deleteFetchData } from "../services/APIDeletes";
 
 const Marca = (props) => {
   const navigate = useNavigate();
@@ -21,34 +21,35 @@ const Marca = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const cargaDatos=async ()=>{
-    setIsLoading(true);
-    await getFetchData("http://localhost:8000/api/v1/marcas",setMarcas,setDataErr);
-    setIsLoading(false);
+    const cargaDatos = async () => {
+      setIsLoading(true);
+      await getFetchData(
+        "http://localhost:8000/api/v1/marcas",
+        setMarcas,
+        setDataErr
+      );
+      setIsLoading(false);
     };
     cargaDatos();
   }, []);
 
- /* const ConsultarDatos = async () => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
+  const handleDelete = async (id) => {
+    // Aquí puedes añadir la lógica para eliminar la marca con el ID especificado
+    const confirm = window.confirm(
+      "¿Estás seguro de que deseas eliminar este producto?"
+    );
+    if (confirm) {
+      try {
+        await deleteFetchData(`http://localhost:8000/api/v1/marcas/${id}`);
+        setMarcas(marcas.filter((marca) => marca.id !== id));
 
-    await fetch(`http://localhost:8000/api/v1/marcas`, {
-      method: "GET",
-      headers: {
-        Authorization: "bearer " + token.replace(/['"]+/g, ""),
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setMarcas(data);
-        setIsLoading(false);
-        console.log(data);
-      })
-      .catch((error) => setDataErr("No esta autorizado"));
-  };*/
+        sessionStorage.setItem("mensaje", "Marca borrado correctamente");
+      
+      } catch (err) {
+        setDataErr("Ha ocurrido un error al intentar eliminar el producto");
+      }
+    }
+  };
 
   return (
     <>
@@ -68,6 +69,7 @@ const Marca = (props) => {
                   <tr>
                     <th>id</th>
                     <th>Nombre</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -75,10 +77,20 @@ const Marca = (props) => {
                     <tr key={e.id}>
                       <td>{e.id}</td>
                       <td>{e.nombre}</td>
-                      <td>
-                        <Button color="danger" className="mx-1">
+                      <td width={200}>
+                        <Button color="primary" className="mx-1">
                           <FontAwesomeIcon
-                            icon={faUserEdit}
+                            icon={faEdit}
+                            className="ml-0 text-white mx-auto"
+                          />
+                        </Button>
+                        <Button
+                          color="danger"
+                          className="mx-1"
+                          onClick={() => handleDelete(e.id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashAlt}
                             className="ml-0 text-white mx-auto"
                           />
                         </Button>
