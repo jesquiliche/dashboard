@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  
-  
-  faUserEdit,
-
-  
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { getFetchData, obtenerProveedores } from "../services/APIGets";
-
+import { deleteFetchData } from "../services/APIDeletes";
 
 const Proveedor = (props) => {
   const [proveedores, setProveedores] = useState([]);
@@ -17,14 +11,36 @@ const Proveedor = (props) => {
   const [dataErr, setDataErr] = useState();
 
   useEffect(() => {
-    const cargarDatos = async ()=>{
-      setLoading(true);
-      await getFetchData("http://localhost:8000/api/v1/proveedores",
-        setProveedores, setDataErr);
-      setLoading(false);
-    };
-    cargarDatos()
+    cargarDatos();
   }, []);
+
+  const cargarDatos = async () => {
+    setLoading(true);
+    await getFetchData(
+      "http://localhost:8000/api/v1/proveedores",
+      setProveedores,
+      setDataErr
+    );
+    setLoading(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      if (window.confirm("¿Está seguro que desea eliminar este proveedor?")) {
+
+        await deleteFetchData(`http://localhost:8000/api/v1/proveedores/${id}`);
+        setProveedores(
+          proveedores.filter((proveedores) => proveedores.id !== id)
+        );
+
+        sessionStorage.setItem("mensaje", "Producto borrado correctamente");
+
+      
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
     <>
@@ -36,9 +52,9 @@ const Proveedor = (props) => {
           <div className="card-body">
             {loading ? (
               <div className="text-center my-2">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
               </div>
             ) : (
               <Table className="table table-striped">
@@ -48,6 +64,7 @@ const Proveedor = (props) => {
                     <th>Nombre</th>
                     <th>C. Postal</th>
                     <th>Población</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -58,9 +75,18 @@ const Proveedor = (props) => {
                       <td>{e.cod_postal}</td>
                       <td>{e.poblacion}</td>
                       <td>
-                        <Button color="danger mx-1">
+                        <Button color="primary mx-1">
                           <FontAwesomeIcon
-                            icon={faUserEdit}
+                            icon={faEdit}
+                            className="ml-0 text-white mx-auto"
+                          />
+                        </Button>
+                        <Button
+                          color="danger mx-1"
+                          onClick={() => handleDelete(e.id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashAlt}
                             className="ml-0 text-white mx-auto"
                           />
                         </Button>

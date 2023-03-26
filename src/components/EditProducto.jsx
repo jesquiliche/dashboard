@@ -8,6 +8,7 @@ import TextField from "./utils/TextField";
 import NumberField from "./utils/NumberField";
 import { useNavigate } from "react-router-dom";
 import { createBrowserHistory } from 'history';
+import Cookies from "universal-cookie";
 
 const EditProducto = (props) => {
   const { id } = useParams();
@@ -75,6 +76,8 @@ const EditProducto = (props) => {
   const actualizarProducto = async (producto) => {
     setCargando(true);
     const url = `http://localhost:8000/api/v1/productos/${id}`;
+    const cookies = new Cookies();
+    const token = cookies.get('token'); 
 
     // putFetchData(url, producto);
     try {
@@ -84,13 +87,14 @@ const EditProducto = (props) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify(producto),
         }
       );
       if (response.ok) {
         // Si la actualización es exitosa, redirigir a la página de detalle del producto
-        sessionStorage.setItem("productoActualizado", true);
+      
         navigate('/Producto');
       } else {
         alert(response.status);

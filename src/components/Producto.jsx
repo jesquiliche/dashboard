@@ -15,44 +15,6 @@ const Producto = (props) => {
   const [productoBorrado, setProductoBorrado] = useState(false);
   const [mensaje, setMensaje] = useState(null);
 
-  useEffect(() => {
-    const cargarDatos = async () => {
-      try {
-        setIsLoading(true);
-        await getFetchData(
-          "http://localhost:8000/api/v1/productos",
-          setProductos,
-          setDataErr
-        );
-        setMensaje(sessionStorage.getItem("mensaje"));
-        //  alert(mensaje);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-      }
-    };
-    cargarDatos();
-  }, []);
-
-  useEffect(() => {
-    const cargarDatos = async () => {
-      try {
-        setIsLoading(true);
-        await getFetchData(
-          "http://localhost:8000/api/v1/productos",
-          setProductos,
-          setDataErr
-        );
-        await setMensaje(sessionStorage.getItem("mensaje"));
-          alert(mensaje);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-      }
-    };
-    cargarDatos();
-  }, [mensaje]);
-
   const handleDelete = async (id) => {
     const confirm = window.confirm(
       "¿Estás seguro de que deseas eliminar este producto?"
@@ -63,12 +25,31 @@ const Producto = (props) => {
         setProductos(productos.filter((producto) => producto.id !== id));
 
         sessionStorage.setItem("mensaje", "Producto borrado correctamente");
-        setMensaje("Producto borrado correctamente.");
+        alert("Producto borrado correctamente.");
       } catch (err) {
         setDataErr("Ha ocurrido un error al intentar eliminar el producto");
       }
     }
   };
+
+  useEffect(() => {
+    alert("Entro");
+    const cargarDatos = async () => {
+      try {
+        setIsLoading(true);
+        await getFetchData(
+          "http://localhost:8000/api/v1/productos",
+          setProductos,
+          setDataErr
+        );
+    
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+    cargarDatos();
+  }, []);
 
   return (
     <>
@@ -86,20 +67,7 @@ const Producto = (props) => {
             </Button>
           </Link>
           <CardBody>
-            {mensaje && (
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Enorabuena!</strong> {mensaje}
-                <button
-                  type="button"
-                  class="close ml-auto"
-                  data-dismiss="alert"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            )}
-
+           
             {isLoading ? (
               <div className="text-center my-2">
                 <Spinner color="primary" />

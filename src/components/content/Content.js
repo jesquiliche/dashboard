@@ -47,9 +47,9 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
           exact
           path="/Producto"
           element={
-       //     <RequireAuth>
+            <RequireAuth>
               <Producto />
-       //     </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
@@ -74,9 +74,9 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
           exact
           path="/Proveedor"
           element={
-            <RequireAuth>
+      //      <RequireAuth>
               <Proveedor />
-            </RequireAuth>
+     //       </RequireAuth>
           }
         />
         <Route

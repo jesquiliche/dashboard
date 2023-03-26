@@ -5,9 +5,10 @@ import ListItems from "./utils/ListItems";
 import TextField from "./utils/TextField";
 import NumberField from "./utils/NumberField";
 import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
 const AddProducto = (props) => {
-
+  const navigate = useNavigate();
   const [producto, setProducto] = useState(
     {
       precio:0,
@@ -91,6 +92,7 @@ const AddProducto = (props) => {
       if (response.ok) {
         // Si la actualización es exitosa, redirigir a la página de detalle del producto
         // props.history.push(`/productos/${id}`);
+        navigate('/Producto');
       } else {
         alert(response.status);
         console.log(producto);
@@ -201,7 +203,7 @@ const AddProducto = (props) => {
             </div>
             <div className="text-center mx-auto mt-2">
               <button type="submit" className="btn btn-primary py-1">
-                Actualizar
+                Agregar
               </button>
             </div>
           </form>
