@@ -12,6 +12,8 @@ const Producto = (props) => {
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [productoActualizado, setProductoActualizado] = useState(false);
+  const [productoBorrado, setProductoBorrado] = useState(false);
+  const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -22,11 +24,8 @@ const Producto = (props) => {
           setProductos,
           setDataErr
         );
-        const actualizado = sessionStorage.getItem("productoActualizado");
-        if (actualizado) {
-          setProductoActualizado(true);
-          sessionStorage.removeItem("productoActualizado");
-        }
+        setMensaje(sessionStorage.getItem("mensaje"));
+        //  alert(mensaje);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -34,6 +33,25 @@ const Producto = (props) => {
     };
     cargarDatos();
   }, []);
+
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        setIsLoading(true);
+        await getFetchData(
+          "http://localhost:8000/api/v1/productos",
+          setProductos,
+          setDataErr
+        );
+        await setMensaje(sessionStorage.getItem("mensaje"));
+          alert(mensaje);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+    cargarDatos();
+  }, [mensaje]);
 
   const handleDelete = async (id) => {
     const confirm = window.confirm(
@@ -43,6 +61,9 @@ const Producto = (props) => {
       try {
         await deleteFetchData(`http://localhost:8000/api/v1/productos/${id}`);
         setProductos(productos.filter((producto) => producto.id !== id));
+
+        sessionStorage.setItem("mensaje", "Producto borrado correctamente");
+        setMensaje("Producto borrado correctamente.");
       } catch (err) {
         setDataErr("Ha ocurrido un error al intentar eliminar el producto");
       }
@@ -65,12 +86,20 @@ const Producto = (props) => {
             </Button>
           </Link>
           <CardBody>
-            {productoActualizado && (
-             <div class="alert alert-success alert-dismissible fade show" role="alert">
-             <strong>Enorabuena!</strong> Producto actualizado correctamente.
-             
-           </div>
+            {mensaje && (
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Enorabuena!</strong> {mensaje}
+                <button
+                  type="button"
+                  class="close ml-auto"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
             )}
+
             {isLoading ? (
               <div className="text-center my-2">
                 <Spinner color="primary" />
