@@ -38,7 +38,7 @@ const Proveedor = (props) => {
       
       }
     } catch (error) {
-      alert(error);
+      setDataErr(error);
     }
   };
 

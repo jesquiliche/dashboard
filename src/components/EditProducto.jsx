@@ -8,9 +8,9 @@ import TextField from "./utils/TextField";
 import NumberField from "./utils/NumberField";
 import { useNavigate } from "react-router-dom";
 import { createBrowserHistory } from 'history';
-import Cookies from "universal-cookie";
 
 const EditProducto = (props) => {
+  
   const { id } = useParams();
   const navigate = useNavigate();
   const history = createBrowserHistory();
@@ -69,41 +69,15 @@ const EditProducto = (props) => {
       ...producto,
       [e.target.name]: e.target.value,
     });
-
-    console.log(e.target.value);
   };
 
   const actualizarProducto = async (producto) => {
     setCargando(true);
+    
     const url = `http://localhost:8000/api/v1/productos/${id}`;
-    const cookies = new Cookies();
-    const token = cookies.get('token'); 
-
-    // putFetchData(url, producto);
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/v1/productos/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(producto),
-        }
-      );
-      if (response.ok) {
-        // Si la actualización es exitosa, redirigir a la página de detalle del producto
-      
-        navigate('/Producto');
-      } else {
-        alert(response.status);
-        throw new Error("No se pudo actualizar el producto");
-      }
-    } catch (error) {
-      setError("No se pudo conectar con el servidor");
-    }
+    await putFetchData(url,producto);
     setCargando(false);
+    navigate("/Producto");
   };
 
   return (

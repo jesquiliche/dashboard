@@ -1,14 +1,14 @@
 import Cookies from "universal-cookie";
-import  handleError  from "./HandleErrors.js";
+import { handleError } from "./HandleErrors.js";
 
 
-export const putFetchData = async (url, data) => {
+export const postFetchData = async (url, data) => {
   try {
     const cookies = new Cookies();
     const token = cookies.get('token'); 
 
     const response = await fetch(url, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         "Access-Control-Allow-Origin": "*",
@@ -16,6 +16,7 @@ export const putFetchData = async (url, data) => {
       },
       body: JSON.stringify(data)
     });
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -25,3 +26,17 @@ export const putFetchData = async (url, data) => {
     throw handleError(error);
   }
 };
+
+const FetchOptions = (token) => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    };
+    if (token) {
+      headers.Authorization = `bearer ${token.replace(/['"]+/g, "")}`;
+    }
+    return {
+      method: "POST",
+      headers,
+    };
+  };

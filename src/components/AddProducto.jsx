@@ -94,12 +94,12 @@ const AddProducto = (props) => {
         // props.history.push(`/productos/${id}`);
         navigate('/Producto');
       } else {
-        alert(response.status);
-        console.log(producto);
+      
+      
         throw new Error();
       }
     } catch (error) {
-      alert(error);
+    
       setError('No se pudo conectar con el servidor');
     }
   

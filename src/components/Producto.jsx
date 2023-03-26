@@ -25,7 +25,7 @@ const Producto = (props) => {
         setProductos(productos.filter((producto) => producto.id !== id));
 
         sessionStorage.setItem("mensaje", "Producto borrado correctamente");
-        alert("Producto borrado correctamente.");
+      
       } catch (err) {
         setDataErr("Ha ocurrido un error al intentar eliminar el producto");
       }
@@ -33,7 +33,7 @@ const Producto = (props) => {
   };
 
   useEffect(() => {
-    alert("Entro");
+    
     const cargarDatos = async () => {
       try {
         setIsLoading(true);
