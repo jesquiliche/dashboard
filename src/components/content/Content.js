@@ -10,13 +10,13 @@ import Tablero from "../Tablero";
 import UserProvider from "../../context/UserProvider";
 import RequireAuth from "../RequireAuth";
 import Proveedor from "../Proveedor";
-import Producto from "../Producto";
+import Producto from "../productos/Producto";
 import Oferta from "../Oferta";
 import Provincia from "../Provincia";
 import Marca from "../Marca";
 import Logout from "../Logout";
-import EditProducto from "../EditProducto";
-import AddProducto from "../AddProducto";
+import EditProducto from "../productos/EditProducto";
+import AddProducto from "../productos/AddProducto";
 
 const Content = ({ sidebarIsOpen, toggleSidebar }) => (
   <Container

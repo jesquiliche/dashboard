@@ -4,8 +4,8 @@ import { Table, Button, Card, CardBody, CardHeader, Spinner } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { deleteFetchData } from "../services/APIDeletes";
-import { getFetchData } from "../services/APIGets";
+import { deleteFetchData } from "../../services/APIDeletes";
+import { getFetchData } from "../../services/APIGets";
 
 const Producto = (props) => {
   const [productos, setProductos] = useState([]);
@@ -76,7 +76,7 @@ const Producto = (props) => {
               <Table striped className="col-md-10 col-lg-12 col-sm-4 mx-auto">
                 <thead>
                   <tr>
-                    <th className="col-md-1 col-sm-1 col-md-1 col-lg-1">id</th>
+                    <th className="col-md-1 col-sm-1 col-md-1 col-lg-1 width=50px">id</th>
                     <th className="col-md-1 col-sm-1 col-md-1 col-lg-5">
                       Nombre
                     </th>
@@ -88,6 +88,12 @@ const Producto = (props) => {
                     </th>
                     <th className="col-md-1 col-sm-12 col-md-1 col-lg-2">
                       Subcategoria
+                    </th>
+                    <th className="col-md-1 col-sm-12 col-md-1 col-lg-2 text-center">
+                      Foto
+                    </th>
+                    <th className="col-md-1 col-sm-12 col-md-1 col-lg-2">
+                      Acciones
                     </th>
                   </tr>
                 </thead>
@@ -107,6 +113,10 @@ const Producto = (props) => {
                       <td className="col-md-2 col-sm-12 col-lg-2">
                         {e.subcategoria}
                       </td>
+                      <td>
+                        <img src={`http://localhost:8000/img/${e.imagen}`} className="img-pequeña"/>
+                      </td>
+
                       <td className="col-md-1 col-sm-1 col-lg-1">
                         <Link to={`/editproducto/${e.id}`}>
                           <Button color="primary mx-1">
@@ -117,6 +127,7 @@ const Producto = (props) => {
                           </Button>
                         </Link>
                       </td>
+
                       <td className="col-md-1 col-sm-1 col-lg-1">
                         <Button
                           color="danger mx-1"

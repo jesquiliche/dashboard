@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
-import { getFetchData } from "../services/APIGets";
-import ListItems from "./utils/ListItems";
-import TextField from "./utils/TextField";
-import NumberField from "./utils/NumberField";
-import Cookies from "universal-cookie";
+import { obtenerProducto, getFetchData } from "../../services/APIGets";
+import { putFetchData } from "../../services/APIPuts";
+import ListItems from "./../utils/ListItems";
+import TextField from "./../utils/TextField";
+import NumberField from "./../utils/NumberField";
 import { useNavigate } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
-const AddProducto = (props) => {
+const EditProducto = (props) => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [producto, setProducto] = useState(
-    {
-      precio:0,
-      nombre:"",
-      descripcion:"",
-      subcategoria_id:1,
-      iva_id:1,
-      marca_id:1
-    });
+  const history = createBrowserHistory();
+  const [producto, setProducto] = useState({});
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
@@ -29,6 +25,9 @@ const AddProducto = (props) => {
   useEffect(() => {
     const cargarDatos = async () => {
       setCargando(true);
+
+      await obtenerProducto(id, setProducto, setError);
+
       await getFetchData(
         "http://localhost:8000/api/v1/subcategorias",
         setSubcategorias,
@@ -60,7 +59,7 @@ const AddProducto = (props) => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    agregarProducto(producto);
+    actualizarProducto(producto);
   };
 
   const handleOnChange = (e) => {
@@ -68,43 +67,17 @@ const AddProducto = (props) => {
       ...producto,
       [e.target.name]: e.target.value,
     });
-
-    
   };
 
-  const agregarProducto = async (producto) => {
+  const actualizarProducto = async (producto) => {
     setCargando(true);
-    const url = `http://localhost:8000/api/v1/productos`;
-  
-    try {
-      const cookies = new Cookies();
-      const token = cookies.get('token'); // Obtenemos el token almacenado en la cookie
-  
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Agregamos el token al header del fetch
-        },
-        body: JSON.stringify(producto),
-      });
-  
-      if (response.ok) {
-        // Si la actualización es exitosa, redirigir a la página de detalle del producto
-        // props.history.push(`/productos/${id}`);
-        navigate('/Producto');
-      } else {
-      
-      
-        throw new Error();
-      }
-    } catch (error) {
-    
-      setError('No se pudo conectar con el servidor');
-    }
-  
+
+    const url = `http://localhost:8000/api/v1/productos/${id}`;
+    await putFetchData(url, producto);
     setCargando(false);
+    navigate("/Producto");
   };
+
   return (
     <>
       <div className="card col-md-12 mx-auto">
@@ -125,7 +98,13 @@ const AddProducto = (props) => {
         <div className="card-body">
           <form onSubmit={handleOnSubmit}>
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-4 card mt-2">
+                <img
+                  src={`http://localhost:8000/img/${producto.imagen}`}
+                  className="img-grande mt-2"
+                />
+              </div>
+              <div className="col-md-4">
                 <TextField
                   name="nombre"
                   placeholder="Introduzca el nombre"
@@ -142,7 +121,6 @@ const AddProducto = (props) => {
                     value={producto.descripcion}
                     onChange={handleOnChange}
                     rows="10"
-                    required
                   >
                     {producto.descripcion}
                   </textarea>
@@ -172,7 +150,7 @@ const AddProducto = (props) => {
                 </div>
               </div>
 
-              <div className="col-md-6">
+              <div className="col-md-4 mt-2">
                 <div className="form-floating py-1">
                   <ListItems
                     data={categorias}
@@ -199,11 +177,22 @@ const AddProducto = (props) => {
                   value={producto.precio}
                   onChange={handleOnChange}
                 ></NumberField>
+                <div class="form-group">
+                  <div class="custom-file">
+                    <input
+                      type="file"
+                      class="custom-file-input"
+                      id="customFileLang"
+                      lang="es"
+                    />
+                    
+                  </div>
+                </div>
               </div>
             </div>
             <div className="text-center mx-auto mt-2">
               <button type="submit" className="btn btn-primary py-1">
-                Agregar
+                Actualizar
               </button>
             </div>
           </form>
@@ -213,4 +202,4 @@ const AddProducto = (props) => {
   );
 };
 
-export default AddProducto;
+export default EditProducto;

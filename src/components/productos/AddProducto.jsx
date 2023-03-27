@@ -1,35 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
-import { obtenerProducto, getFetchData } from "../services/APIGets";
-import { putFetchData } from "../services/APIPuts";
-import ListItems from "./utils/ListItems";
-import TextField from "./utils/TextField";
-import NumberField from "./utils/NumberField";
+import { getFetchData } from "../../services/APIGets";
+import ListItems from "../utils/ListItems";
+import TextField from "../utils/TextField";
+import NumberField from "../utils/NumberField";
+import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
-import { createBrowserHistory } from 'history';
 
-const EditProducto = (props) => {
-  
-  const { id } = useParams();
+const AddProducto = (props) => {
   const navigate = useNavigate();
-  const history = createBrowserHistory();
-  const [producto, setProducto] = useState({});
+  const [producto, setProducto] = useState(
+    {
+      precio:0,
+      nombre:"",
+      descripcion:"",
+      subcategoria_id:1,
+      iva_id:1,
+      marca_id:1
+    });
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [ivas, setIvas] = useState([]);
   const [error, setError] = useState([]);
-  
 
   const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
     const cargarDatos = async () => {
       setCargando(true);
-
-      await obtenerProducto(id, setProducto, setError);
-
       await getFetchData(
         "http://localhost:8000/api/v1/subcategorias",
         setSubcategorias,
@@ -61,7 +60,7 @@ const EditProducto = (props) => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    actualizarProducto(producto);
+    agregarProducto(producto);
   };
 
   const handleOnChange = (e) => {
@@ -69,17 +68,43 @@ const EditProducto = (props) => {
       ...producto,
       [e.target.name]: e.target.value,
     });
-  };
 
-  const actualizarProducto = async (producto) => {
-    setCargando(true);
     
-    const url = `http://localhost:8000/api/v1/productos/${id}`;
-    await putFetchData(url,producto);
-    setCargando(false);
-    navigate("/Producto");
   };
 
+  const agregarProducto = async (producto) => {
+    setCargando(true);
+    const url = `http://localhost:8000/api/v1/productos`;
+  
+    try {
+      const cookies = new Cookies();
+      const token = cookies.get('token'); // Obtenemos el token almacenado en la cookie
+  
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Agregamos el token al header del fetch
+        },
+        body: JSON.stringify(producto),
+      });
+  
+      if (response.ok) {
+        // Si la actualización es exitosa, redirigir a la página de detalle del producto
+        // props.history.push(`/productos/${id}`);
+        navigate('/Producto');
+      } else {
+      
+      
+        throw new Error();
+      }
+    } catch (error) {
+    
+      setError('No se pudo conectar con el servidor');
+    }
+  
+    setCargando(false);
+  };
   return (
     <>
       <div className="card col-md-12 mx-auto">
@@ -117,6 +142,7 @@ const EditProducto = (props) => {
                     value={producto.descripcion}
                     onChange={handleOnChange}
                     rows="10"
+                    required
                   >
                     {producto.descripcion}
                   </textarea>
@@ -177,7 +203,7 @@ const EditProducto = (props) => {
             </div>
             <div className="text-center mx-auto mt-2">
               <button type="submit" className="btn btn-primary py-1">
-                Actualizar
+                Agregar
               </button>
             </div>
           </form>
@@ -187,4 +213,4 @@ const EditProducto = (props) => {
   );
 };
 
-export default EditProducto;
+export default AddProducto;
