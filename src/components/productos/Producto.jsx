@@ -7,14 +7,17 @@ import { Link } from "react-router-dom";
 import { deleteFetchData } from "../../services/APIDeletes";
 import { getFetchData } from "../../services/APIGets";
 
+
+
+
 const Producto = (props) => {
   const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [productoActualizado, setProductoActualizado] = useState(false);
-  const [productoBorrado, setProductoBorrado] = useState(false);
-  const [mensaje, setMensaje] = useState(null);
+  
 
+
+ 
   const handleDelete = async (id) => {
     const confirm = window.confirm(
       "¿Estás seguro de que deseas eliminar este producto?"
@@ -98,7 +101,7 @@ const Producto = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {productos.map((e) => (
+                  {productos.productos.map((e) =>  (
                     <tr key={e.id}>
                       <td className="col-md-1 col-sm-1 col-md-1 col-lg-5">
                         {e.id}
@@ -153,6 +156,7 @@ const Producto = (props) => {
               </div>
             )}
           </CardBody>
+     
         </Card>
       </div>
     </>
