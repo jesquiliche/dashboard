@@ -177,15 +177,16 @@ const EditProducto = (props) => {
                   value={producto.precio}
                   onChange={handleOnChange}
                 ></NumberField>
-                <div class="form-group">
-                  <div class="custom-file">
+                <div className="form-group">
+                  <div className="custom-file">
                     <input
                       type="file"
-                      class="custom-file-input"
+                      className="custom-file-input"
                       id="customFileLang"
                       lang="es"
+                      accept="image/*"
+                      maxLength="2048000"
                     />
-                    
                   </div>
                 </div>
               </div>

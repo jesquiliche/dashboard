@@ -23,15 +23,17 @@ const Producto = (props) => {
       "¿Estás seguro de que deseas eliminar este producto?"
     );
     if (confirm) {
+    
       try {
-        await deleteFetchData(`http://localhost:8000/api/v1/productos/${id}`);
-        setProductos(productos.filter((producto) => producto.id !== id));
+        deleteFetchData(`http://localhost:8000/api/v1/productos/${id}`);
+        await setProductos(productos.filter((producto) => producto.id !== id));
 
         sessionStorage.setItem("mensaje", "Producto borrado correctamente");
       
       } catch (err) {
         setDataErr("Ha ocurrido un error al intentar eliminar el producto");
       }
+      
     }
   };
 
@@ -101,7 +103,7 @@ const Producto = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {productos.productos.map((e) =>  (
+                  {productos.map((e) =>  (
                     <tr key={e.id}>
                       <td className="col-md-1 col-sm-1 col-md-1 col-lg-5">
                         {e.id}
