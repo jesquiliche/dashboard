@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import { obtenerProducto, getFetchData } from "../../services/APIGets";
@@ -23,6 +23,8 @@ const EditProducto = (props) => {
   const [cargando, setCargando] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const imgRef = useRef(null);
+
 
   const handleImageChange = (event) => {
     setSelectedImage(event.target.files[0]);
@@ -48,6 +50,12 @@ const EditProducto = (props) => {
     
 }
  
+useEffect(() => {
+  if (selectedImage) {
+    const objectUrl = URL.createObjectURL(selectedImage);
+    imgRef.current.src = objectUrl;
+  }
+}, [selectedImage]);
   
   
   
@@ -133,7 +141,7 @@ const EditProducto = (props) => {
               <div className="col-md-4 card mt-2">
                 <img
                   src={`http://localhost:8000/img/${producto.imagen}`}
-                  className="img-grande mt-2"
+                  className="img-grande mt-2" ref={imgRef}
                 />
               </div>
               <div className="col-md-4">
