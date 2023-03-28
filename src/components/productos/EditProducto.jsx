@@ -22,6 +22,38 @@ const EditProducto = (props) => {
 
   const [cargando, setCargando] = useState(false);
 
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (event) => {
+    setSelectedImage(event.target.files[0]);
+  }
+
+  const handleUploadImage = async () => {
+    alert("entro");   
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedImage);
+  
+      await fetch('http://localhost:8000/api/v1/upload-image', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+    
+  
+    }catch(error){
+        alert(error);
+    }
+    
+}
+ 
+  
+  
+  
+  
+  
+  
   useEffect(() => {
     const cargarDatos = async () => {
       setCargando(true);
@@ -186,8 +218,12 @@ const EditProducto = (props) => {
                       lang="es"
                       accept="image/*"
                       maxLength="2048000"
+                      onChange={handleImageChange}
                     />
                   </div>
+                  <button className="btn btn-primary mt-2" 
+                    type="button" onClick={handleUploadImage}>Subir imagen</button>
+
                 </div>
               </div>
             </div>
