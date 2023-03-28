@@ -20,9 +20,7 @@ const EditProducto = (props) => {
   const [marcas, setMarcas] = useState([]);
   const [ivas, setIvas] = useState([]);
   const [error, setError] = useState([]);
-
   const [cargando, setCargando] = useState(false);
-
   const [selectedImage, setSelectedImage] = useState(null);
   const imgRef = useRef(null);
 
@@ -33,7 +31,12 @@ const EditProducto = (props) => {
 
   const handleUploadImage = async () => {
     setCargando(true); 
-    await uploadImage('http://localhost:8000/api/v1/upload-image',selectedImage);
+    const data=await uploadImage('http://localhost:8000/api/v1/upload-image',selectedImage);
+    setProducto({
+      ...producto,
+      imagen: data.url,
+    });
+    alert(data.url);
     setCargando(false);
 }
  
@@ -127,7 +130,7 @@ useEffect(() => {
             <div className="row">
               <div className="col-md-4 card mt-2">
                 <img
-                  src={`http://localhost:8000/img/${producto.imagen}`}
+                  src={`http://localhost:8000${producto.imagen}`}
                   className="img-grande mt-2" ref={imgRef}
                 />
               </div>

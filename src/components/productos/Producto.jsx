@@ -119,7 +119,7 @@ const Producto = (props) => {
                         {e.subcategoria}
                       </td>
                       <td>
-                        <img src={`http://localhost:8000/img/${e.imagen}`} className="img-pequeña"/>
+                        <img src={`http://localhost:8000${e.imagen}`} className="img-pequeña"/>
                       </td>
 
                       <td className="col-md-1 col-sm-1 col-lg-1">
