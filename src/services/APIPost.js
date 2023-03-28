@@ -1,5 +1,5 @@
 import Cookies from "universal-cookie";
-import { handleError } from "./HandleErrors.js";
+import handleError from "./HandleErrors.js";
 
 
 export const postFetchData = async (url, data) => {
@@ -40,3 +40,21 @@ const FetchOptions = (token) => {
       headers,
     };
   };
+
+  export const uploadImage = async (url, image) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", image);
+  
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      alert(error);
+    }
+  }
+  

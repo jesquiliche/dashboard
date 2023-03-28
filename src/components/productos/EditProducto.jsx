@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import { obtenerProducto, getFetchData } from "../../services/APIGets";
 import { putFetchData } from "../../services/APIPuts";
+import { uploadImage } from "../../services/APIPost";
 import ListItems from "./../utils/ListItems";
 import TextField from "./../utils/TextField";
 import NumberField from "./../utils/NumberField";
@@ -12,7 +13,7 @@ import { createBrowserHistory } from "history";
 const EditProducto = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const history = createBrowserHistory();
+  
   const [producto, setProducto] = useState({});
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -31,23 +32,9 @@ const EditProducto = (props) => {
   }
 
   const handleUploadImage = async () => {
-    alert("entro");   
-    try {
-      const formData = new FormData();
-      formData.append('image', selectedImage);
-  
-      await fetch('http://localhost:8000/api/v1/upload-image', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => console.log(data))
-    
-  
-    }catch(error){
-        alert(error);
-    }
-    
+    setCargando(true); 
+    await uploadImage('http://localhost:8000/api/v1/upload-image',selectedImage);
+    setCargando(false);
 }
  
 useEffect(() => {
