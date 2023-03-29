@@ -6,6 +6,7 @@ import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { deleteFetchData } from "../../services/APIDeletes";
 import { getFetchData } from "../../services/APIGets";
+import TextField from "../utils/TextField";
 
 import DataTable from "react-data-table-component";
 
@@ -71,7 +72,17 @@ const Producto = (props) => {
   const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
+    const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (e) => {
+    
+    const value = e.target.value || "";
+    setSearchText(value);
+  };
+  
+  const filteredProductos = productos.filter((producto) =>
+  producto.nombre.toLowerCase().includes(searchText.toLowerCase())
+);
 
   const handleDelete = async (id) => {
     const confirm = window.confirm(
@@ -114,6 +125,8 @@ const Producto = (props) => {
           <CardHeader className="text-center">
             <h3>Productos</h3>
           </CardHeader>
+          <table className="mx-5">
+            <td width="60%">
           <Link to={`/addproducto`}>
             <Button color="primary mx-1 my-2 mx-3">
               <FontAwesomeIcon
@@ -122,6 +135,16 @@ const Producto = (props) => {
               />
             </Button>
           </Link>
+          </td>
+          <td width="40%">
+          <TextField
+            name="Buscar"
+            placeholder="Buscar..."
+            value={searchText}
+            onChange={handleSearch}
+    />
+    </td>
+    </table>
           <CardBody>
             {isLoading ? (
               <div className="text-center my-2">
@@ -130,15 +153,14 @@ const Producto = (props) => {
             ) : (
               <DataTable
                 columns={columns}
-                data={productos}
+                data={filteredProductos}
                 pagination
                 paginationRowsPerPageOptions={[5,10, 20, 50]}
                 paginationPerPage={4}
-                customStyles={{
-                  rows: {
-                    fontSize: "18px", // Cambia aquí el tamaño de la letra a tu gusto
-                  },
-                }}
+                search={searchText}
+                onSearch={handleSearch}
+            
+              
               />
             )}
             {dataErr && (

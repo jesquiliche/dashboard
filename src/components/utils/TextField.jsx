@@ -4,7 +4,7 @@ function TextField({name,placeholder,value,required=true,onChange}) {
   
   return (
     
-    <div className="form-floating my-2 py-2">
+    <div className="form-floating my-2 py-1">
         <input
             type="text"
             className="form-control"
