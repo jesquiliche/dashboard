@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Card, CardBody, CardHeader, Spinner } from "reactstrap";
+import {  Button, Card, CardBody, CardHeader, Spinner } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { deleteFetchData } from "../../services/APIDeletes";
 import { getFetchData } from "../../services/APIGets";
-import ReactPaginate from "react-paginate";
+
 import DataTable from "react-data-table-component";
 
 const Producto = (props) => {
@@ -132,9 +132,8 @@ const Producto = (props) => {
                 columns={columns}
                 data={productos}
                 pagination
-                paginationPerPage={10}
-                paginationRowsPerPageOptions={[10, 20, 50]}
-                paginationPerPage={3}
+                paginationRowsPerPageOptions={[5,10, 20, 50]}
+                paginationPerPage={4}
                 customStyles={{
                   rows: {
                     fontSize: "18px", // Cambia aquí el tamaño de la letra a tu gusto
