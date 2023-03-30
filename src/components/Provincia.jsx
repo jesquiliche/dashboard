@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { getFetchData } from "../services/APIGets";
 import MyDataTable from "./utils/MyDatatable";
-//import DataTable from "react-data-table-component";
 
 const columns = [
   {
@@ -56,16 +55,6 @@ const Poblacion = (props) => {
                 </div>
               </div>
             ) : (
-  /*            <DataTable
-                columns={columns}
-                data={provincias}
-                pagination={true}
-                striped={true}
-                highlightOnHover={true}
-                pointerOnHover={true}
-                paginationRowsPerPageOptions={[5, 10, 20, 30]}
-                paginationPerPage={7} // opcional, si deseas establecer un valor predeterminado
-              />*/
               <MyDataTable title="Provincias"
                 data={provincias}
                 columns={columns} />

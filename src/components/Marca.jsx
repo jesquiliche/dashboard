@@ -104,43 +104,7 @@ const Marca = (props) => {
                 pointerOnHover={true}
                 paginationRowsPerPageOptions={[5, 10, 20, 50]}
                 paginationPerPage={5}
-                
-            />
-             /* <Table striped>
-                <thead>
-                  <tr>
-                    <th>id</th>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {marcas.map((e) => (
-                    <tr key={e.id}>
-                      <td>{e.id}</td>
-                      <td>{e.nombre}</td>
-                      <td width={200}>
-                        <Button color="primary" className="mx-1">
-                          <FontAwesomeIcon
-                            icon={faEdit}
-                            className="ml-0 text-white mx-auto"
-                          />
-                        </Button>
-                        <Button
-                          color="danger"
-                          className="mx-1"
-                          onClick={() => handleDelete(e.id)}
-                        >
-                          <FontAwesomeIcon
-                            icon={faTrashAlt}
-                            className="ml-0 text-white mx-auto"
-                          />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>*/
+              />
             )}
             {dataErr && (
               <div className="alert alert-secondary mt-2 py-2" role="alert">

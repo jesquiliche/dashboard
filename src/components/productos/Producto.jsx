@@ -7,6 +7,8 @@ import { deleteFetchData } from "../../services/APIDeletes";
 import { getFetchData } from "../../services/APIGets";
 import TextField from "../utils/TextField";
 import DataTable from "react-data-table-component";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 const Producto = (props) => {
   // Estados
@@ -47,7 +49,8 @@ const Producto = (props) => {
       cell: (row) => (
         <img
           src={`http://localhost:8000${row.imagen}`}
-          className="img-pequeña" alt="Foto"
+          className="img-pequeña"
+          alt="Foto"
         />
       ),
     },
@@ -56,14 +59,18 @@ const Producto = (props) => {
       cell: (row) => (
         <>
           <Link to={`/editproducto/${row.id}`}>
-            <Button color="primary mx-1">
+            <Button color="primary mx-1" className="editar">
               <FontAwesomeIcon
                 icon={faEdit}
                 className="ml-0 text-white mx-auto"
               />
             </Button>
           </Link>
-          <Button color="danger mx-1" onClick={() => handleDelete(row.id)}>
+          <Button
+            color="danger mx-1"
+            className="eliminar"
+            onClick={() => handleDelete(row.id)}
+          >
             <FontAwesomeIcon
               icon={faTrash}
               className="ml-0 text-white mx-auto"
@@ -106,7 +113,7 @@ const Producto = (props) => {
   };
 
   // Obtener los datos de productos desde la base de datos
-  useEffect(()=>{
+  useEffect(() => {
     const cargarDatos = async () => {
       try {
         setIsLoading(true);
@@ -135,7 +142,11 @@ const Producto = (props) => {
           <table className="mx-3">
             <td width="60%">
               <Link to={`/addproducto`}>
-                <Button color="primary mx-1 my-2 mx-3">
+                <Button
+                  className="agregar"
+                  color="primary"
+                  data-tooltip-content="Agregar producto"
+                >
                   <FontAwesomeIcon
                     icon={faPlus}
                     className="ml-0 text-white mx-auto"
@@ -158,18 +169,35 @@ const Producto = (props) => {
                 <Spinner color="primary" />
               </div>
             ) : (
-              <DataTable
-                columns={columns}
-                data={filteredProductos}
-                striped={true}
-                pagination
-                highlightOnHover={true}
-                pointerOnHover={true}
-                paginationRowsPerPageOptions={[5, 10, 20, 50]}
-                paginationPerPage={4}
-                search={searchText}
-                onSearch={handleSearch}
-              />
+              <>
+                <DataTable
+                  columns={columns}
+                  data={filteredProductos}
+                  striped={true}
+                  pagination
+                  highlightOnHover={true}
+                  pointerOnHover={true}
+                  paginationRowsPerPageOptions={[5, 10, 20, 50]}
+                  paginationPerPage={4}
+                  search={searchText}
+                  onSearch={handleSearch}
+                />
+                <ReactTooltip
+                  anchorSelect=".editar"
+                  place="bottom"
+                  content="Editar producto"
+                />
+                <ReactTooltip
+                  anchorSelect=".eliminar"
+                  place="bottom"
+                  content="Eliminar producto"
+                />
+                <ReactTooltip
+                  anchorSelect=".agregar"
+                  place="bottom"
+                  content="Agregar producto"
+                />
+              </>
             )}
             {dataErr && (
               <div
