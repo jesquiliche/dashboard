@@ -8,12 +8,11 @@ import ListItems from "./../utils/ListItems";
 import TextField from "./../utils/TextField";
 import NumberField from "./../utils/NumberField";
 import { useNavigate } from "react-router-dom";
-import { createBrowserHistory } from "history";
+
 
 const EditProducto = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
   const [producto, setProducto] = useState({});
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);

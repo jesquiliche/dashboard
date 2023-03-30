@@ -1,14 +1,9 @@
 import Cookies from "universal-cookie";
 import handleError from "./HandleErrors.js";
 
-
-
 export const deleteFetchData = async (url, setError) => {
-  const res=await fetchData(url, setError);
- // const data=await res.json();
-//  setData(data);    
+  await fetchData(url, setError);
 };
-
 
 const getFetchOptions = (token) => {
   const headers = {
@@ -24,16 +19,15 @@ const getFetchOptions = (token) => {
   };
 };
 
-
 const fetchData = async (url, setError) => {
-  try{
+  try {
     const cookies = new Cookies();
     const token = cookies.get("token");
-    const options=getFetchOptions(token);
+    const options = getFetchOptions(token);
     const response = await fetch(url, options);
     const result = await handleError(response);
     return result;
-  }catch(error){
+  } catch (error) {
     setError("No se pudo conectar con el servidor");
   }
 };

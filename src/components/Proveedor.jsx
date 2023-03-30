@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { getFetchData, obtenerProveedores } from "../services/APIGets";
+import { getFetchData} from "../services/APIGets";
 import { deleteFetchData } from "../services/APIDeletes";
 
 const Proveedor = (props) => {

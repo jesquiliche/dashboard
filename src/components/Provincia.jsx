@@ -1,10 +1,21 @@
 import { useState, useEffect } from "react";
 import React from "react";
-import {  Button } from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { getFetchData } from "../services/APIGets";
+import MyDataTable from "./utils/MyDatatable";
+//import DataTable from "react-data-table-component";
 
+const columns = [
+  {
+    name: "Código",
+    selector: "codigo",
+    sortable: true, //opcional
+  },
+  {
+    name: "Nombre",
+    selector: "nombre",
+    sortable: true, //opcional
+  },
+];
 
 const Poblacion = (props) => {
   const [provincias, setProvincias] = useState([]);
@@ -12,27 +23,24 @@ const Poblacion = (props) => {
   const [dataErr, setDataErr] = useState();
 
   useEffect(() => {
-    const cargarDatos = async ()=>{
+    const cargarDatos = async () => {
       setIsLoading(true);
-      await getFetchData("http://localhost:8000/api/v1/provincias",
-      setProvincias, setDataErr);
-     // setProvincias(data);
+      await getFetchData(
+        "http://localhost:8000/api/v1/provincias",
+        setProvincias,
+        setDataErr
+      );
+      // setProvincias(data);
       setIsLoading(false);
     };
-    try{
-    
+    try {
       cargarDatos();
-    
-    }
-     catch(error){
+    } catch (error) {
       setIsLoading(false);
       alert(error);
     }
-   
-    
   }, []);
 
-  
   return (
     <>
       <div className="container">
@@ -42,29 +50,26 @@ const Poblacion = (props) => {
           </div>
           <div className="card-body">
             {isLoading ? (
-             <div className="text-center my-2">
-             <div className="spinner-border text-primary" role="status">
-               <span className="visually-hidden">Loading...</span>
-             </div>
-           </div>
+              <div className="text-center my-2">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
             ) : (
-              <table className="table table-striped">
-                
-                <thead>
-                  <th>Código</th>
-                  <th>Nombre</th>
-                  <th></th>
-                </thead>
-                <tbody>
-                  {provincias.map((e) => (
-                    <tr>
-                      <td>{e.codigo}</td>
-                      <td>{e.nombre}</td>
-                  
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+  /*            <DataTable
+                columns={columns}
+                data={provincias}
+                pagination={true}
+                striped={true}
+                highlightOnHover={true}
+                pointerOnHover={true}
+                paginationRowsPerPageOptions={[5, 10, 20, 30]}
+                paginationPerPage={7} // opcional, si deseas establecer un valor predeterminado
+              />*/
+              <MyDataTable title="Provincias"
+                data={provincias}
+                columns={columns} />
+               
             )}
           </div>
           {dataErr ? (

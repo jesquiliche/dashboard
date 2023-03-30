@@ -58,9 +58,14 @@ body {
 }
 .btn {
   border-radius: 20px;
-
+  transition: transform 0.5s ease;
 }
 
+.btn:hover {
+  border-radius: 20px;
+  transform: scale(1.1);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
 a,
 a:hover,
 a:focus {
@@ -109,14 +114,22 @@ a:focus {
   background: #5555acea;
 }
 
+.nav-item {
+ 
+  overflow: hidden;
+}
 .nav-item:hover {
+  overflow: hidden;
+  border-radius: 12px;
   color: #e3e8f1;
   background: rgb(51, 15, 150);
+  
 }
 
 .items-menu {
   color: #fff;
   background: #5555acea;
+  overflow: hidden;
 }
 
 li a.dropdown-toggle::after {

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import {
-  Table,
   Button,
   Card,
   CardBody,
@@ -10,15 +9,47 @@ import {
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 import { getFetchData } from "../services/APIGets";
 import { deleteFetchData } from "../services/APIDeletes";
+import DataTable from 'react-data-table-component';
 
 const Marca = (props) => {
-  const navigate = useNavigate();
   const [marcas, setMarcas] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const columns = [
+    {
+      name: 'id',
+      selector: 'id',
+      sortable: true,
+    },
+    {
+      name: 'Nombre',
+      selector: 'nombre',
+      sortable: true,
+    },
+    {
+      name: 'Acciones',
+      cell: (row) => (
+        <div width={200}>
+          <Button color="primary" className="mx-1">
+            <FontAwesomeIcon icon={faEdit} className="ml-0 text-white mx-auto" />
+          </Button>
+          <Button
+            color="danger"
+            className="mx-1"
+            onClick={() => handleDelete(row.id)}
+          >
+            <FontAwesomeIcon
+              icon={faTrashAlt}
+              className="ml-0 text-white mx-auto"
+            />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+  
 
   useEffect(() => {
     const cargaDatos = async () => {
@@ -64,7 +95,18 @@ const Marca = (props) => {
                 <Spinner color="primary" />
               </div>
             ) : (
-              <Table striped>
+              <DataTable
+              columns={columns}
+                data={marcas}
+                striped={true}
+                pagination
+                highlightOnHover={true}
+                pointerOnHover={true}
+                paginationRowsPerPageOptions={[5, 10, 20, 50]}
+                paginationPerPage={5}
+                
+            />
+             /* <Table striped>
                 <thead>
                   <tr>
                     <th>id</th>
@@ -98,7 +140,7 @@ const Marca = (props) => {
                     </tr>
                   ))}
                 </tbody>
-              </Table>
+              </Table>*/
             )}
             {dataErr && (
               <div className="alert alert-secondary mt-2 py-2" role="alert">

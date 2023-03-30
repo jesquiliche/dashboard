@@ -63,7 +63,7 @@ const submenus = [
   [
     {
       title: "Login",
-      target: "/Login",
+      target: "/Login"
     },
     {
       title: "Usuarios",
