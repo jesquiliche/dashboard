@@ -1,31 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
+import { useParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
-import { getFetchData } from "../../services/APIGets";
-import ListItems from "../utils/ListItems";
-import TextField from "../utils/TextField";
-import NumberField from "../utils/NumberField";
-import Cookies from "universal-cookie";
+import {getFetchData } from "../../services/APIGets";
+
+import { uploadImage,postFetchData } from "../../services/APIPost";
+import ListItems from "./../utils/ListItems";
+import TextField from "./../utils/TextField";
+import NumberField from "./../utils/NumberField";
 import { useNavigate } from "react-router-dom";
 
+
 const AddProducto = (props) => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [producto, setProducto] = useState(
-    {
-      precio:0,
-      nombre:"",
-      descripcion:"",
-      subcategoria_id:1,
-      iva_id:1,
-      marca_id:1
-    });
+  const [producto, setProducto] = useState({
+    'nombre':'',
+    'descripcion':'',
+    'precio':0,
+    'imagen':'',
+    'subcategoria_id':1,
+    'iva_id':1,
+    'marca_id':1
+  });
   const [subcategorias, setSubcategorias] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [ivas, setIvas] = useState([]);
   const [error, setError] = useState([]);
-
   const [cargando, setCargando] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const imgRef = useRef(null);
 
+
+  const handleImageChange = (event) => {
+    setSelectedImage(event.target.files[0]);
+  }
+
+  const handleUploadImage = async () => {
+    setCargando(true); 
+    const data=await uploadImage('http://localhost:8000/api/v1/upload-image',selectedImage);
+    setProducto({
+      ...producto,
+      imagen: data.url,
+    });
+   // alert(data.url);
+    setCargando(false);
+}
+ 
+useEffect(() => {
+  if (selectedImage) {
+    const objectUrl = URL.createObjectURL(selectedImage);
+    imgRef.current.src = objectUrl;
+  }
+}, [selectedImage]);
+  
+  
+  
+  
+  
+  
   useEffect(() => {
     const cargarDatos = async () => {
       setCargando(true);
@@ -60,7 +93,7 @@ const AddProducto = (props) => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    agregarProducto(producto);
+    añadirProducto(producto);
   };
 
   const handleOnChange = (e) => {
@@ -68,43 +101,22 @@ const AddProducto = (props) => {
       ...producto,
       [e.target.name]: e.target.value,
     });
-
-    
   };
 
-  const agregarProducto = async (producto) => {
+  const añadirProducto = async (producto) => {
     setCargando(true);
-    const url = `http://localhost:8000/api/v1/productos`;
-  
+    console.log("Entro");
+    console.log(producto);
     try {
-      const cookies = new Cookies();
-      const token = cookies.get('token'); // Obtenemos el token almacenado en la cookie
-  
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Agregamos el token al header del fetch
-        },
-        body: JSON.stringify(producto),
-      });
-  
-      if (response.ok) {
-        // Si la actualización es exitosa, redirigir a la página de detalle del producto
-        // props.history.push(`/productos/${id}`);
-        navigate('/Producto');
-      } else {
-      
-      
-        throw new Error();
-      }
+        const url = `http://localhost:8000/api/v1/productos`;
+        await postFetchData(url, producto);
     } catch (error) {
-    
-      setError('No se pudo conectar con el servidor');
+        alert(error);
     }
-  
     setCargando(false);
+    navigate("/Producto");
   };
+
   return (
     <>
       <div className="card col-md-12 mx-auto">
@@ -125,7 +137,13 @@ const AddProducto = (props) => {
         <div className="card-body">
           <form onSubmit={handleOnSubmit}>
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-4 card mt-2">
+                <img
+                  src={``}
+                  className="img-grande mt-2" ref={imgRef}
+                />
+              </div>
+              <div className="col-md-4">
                 <TextField
                   name="nombre"
                   placeholder="Introduzca el nombre"
@@ -142,7 +160,6 @@ const AddProducto = (props) => {
                     value={producto.descripcion}
                     onChange={handleOnChange}
                     rows="10"
-                    required
                   >
                     {producto.descripcion}
                   </textarea>
@@ -172,7 +189,7 @@ const AddProducto = (props) => {
                 </div>
               </div>
 
-              <div className="col-md-6">
+              <div className="col-md-4 mt-2">
                 <div className="form-floating py-1">
                   <ListItems
                     data={categorias}
@@ -199,11 +216,27 @@ const AddProducto = (props) => {
                   value={producto.precio}
                   onChange={handleOnChange}
                 ></NumberField>
+                <div className="form-group">
+                  <div className="custom-file">
+                    <input
+                      type="file"
+                      className="custom-file-input"
+                      id="customFileLang"
+                      lang="es"
+                      accept="image/*"
+                      maxLength="2048000"
+                      onChange={handleImageChange}
+                    />
+                  </div>
+                  <button className="btn btn-primary mt-2" 
+                    type="button" onClick={handleUploadImage}>Subir imagen</button>
+
+                </div>
               </div>
             </div>
             <div className="text-center mx-auto mt-2">
               <button type="submit" className="btn btn-primary py-1">
-                Agregar
+                Actualizar
               </button>
             </div>
           </form>
