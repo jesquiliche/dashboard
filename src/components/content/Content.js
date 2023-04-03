@@ -20,6 +20,8 @@ import AddProducto from "../productos/AddProducto";
 import AddProveedor from "../AddProveedor";
 import EditProveedor from "../EditProveedor";
 
+
+
 const Content = ({ sidebarIsOpen, toggleSidebar }) => (
   <Container
     fluid
@@ -65,7 +67,7 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
         />
         <Route
           exact
-          path="/editproveedor"
+          path="/Editproveedor"
           element={
             <RequireAuth>
               <EditProveedor />

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
-const EditProveedor = () => {
+const EditProveedor = (props) => {
   const [proveedor, setProveedor] = useState({
     nif: "",
     nombre: "",
@@ -21,6 +21,11 @@ const EditProveedor = () => {
     event.preventDefault();
     // Aquí podrías enviar los datos del formulario al servidor
   };
+  
+  useEffect(() => {
+    console.log("entro");
+    alert("entro");
+  }, []);
 
   return (
     <Card>
