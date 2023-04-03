@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "reactstrap";
+import { Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { getFetchData} from "../services/APIGets";
 import { deleteFetchData } from "../services/APIDeletes";
+import DataTable from 'react-data-table-component';
 
 const Proveedor = (props) => {
   const [proveedores, setProveedores] = useState([]);
@@ -42,6 +43,54 @@ const Proveedor = (props) => {
     }
   };
 
+  const columns = [
+    {
+      name: 'Nif',
+      selector: 'nif',
+      sortable: true,
+    },
+    {
+      name: 'Nombre',
+      selector: 'nombre',
+      sortable: true,
+    },
+    {
+      name: 'C. Postal',
+      selector: 'cod_postal',
+      sortable: true,
+    },
+    {
+      name: 'Población',
+      selector: 'poblacion',
+      sortable: true,
+    },
+    {
+      name: 'Acciones',
+      cell: (row) => (
+        <>
+          <Button color="primary mx-1">
+            <FontAwesomeIcon
+              icon={faEdit}
+              className="ml-0 text-white mx-auto"
+            />
+          </Button>
+          <Button
+            color="danger mx-1"
+            onClick={() => handleDelete(row.id)}
+          >
+            <FontAwesomeIcon
+              icon={faTrashAlt}
+              className="ml-0 text-white mx-auto"
+            />
+          </Button>
+        </>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+
   return (
     <>
       <div className="container">
@@ -57,44 +106,11 @@ const Proveedor = (props) => {
                 </div>
               </div>
             ) : (
-              <Table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Nif</th>
-                    <th>Nombre</th>
-                    <th>C. Postal</th>
-                    <th>Población</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {proveedores.map((e) => (
-                    <tr key={e.id}>
-                      <td>{e.nif}</td>
-                      <td>{e.nombre}</td>
-                      <td>{e.cod_postal}</td>
-                      <td>{e.poblacion}</td>
-                      <td>
-                        <Button color="primary mx-1">
-                          <FontAwesomeIcon
-                            icon={faEdit}
-                            className="ml-0 text-white mx-auto"
-                          />
-                        </Button>
-                        <Button
-                          color="danger mx-1"
-                          onClick={() => handleDelete(e.id)}
-                        >
-                          <FontAwesomeIcon
-                            icon={faTrashAlt}
-                            className="ml-0 text-white mx-auto"
-                          />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+              <DataTable
+                columns={columns}
+                data={proveedores}
+                pagination
+              />
             )}
           </div>
           {dataErr && (

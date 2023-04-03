@@ -17,6 +17,8 @@ import Marca from "../Marca";
 import Logout from "../Logout";
 import EditProducto from "../productos/EditProducto";
 import AddProducto from "../productos/AddProducto";
+import AddProveedor from "../AddProveedor";
+import EditProveedor from "../EditProveedor";
 
 const Content = ({ sidebarIsOpen, toggleSidebar }) => (
   <Container
@@ -52,6 +54,25 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
             </RequireAuth>
           }
         />
+        <Route
+          exact
+          path="/addproveedor"
+          element={
+            <RequireAuth>
+              <AddProveedor />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path="/editproveedor"
+          element={
+            <RequireAuth>
+              <EditProveedor />
+            </RequireAuth>
+          }
+        />
+        
         <Route
           exact
           path="/Oferta"

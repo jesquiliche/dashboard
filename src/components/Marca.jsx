@@ -49,7 +49,6 @@ const Marca = (props) => {
       ),
     },
   ];
-  
 
   useEffect(() => {
     const cargaDatos = async () => {
@@ -65,7 +64,6 @@ const Marca = (props) => {
   }, []);
 
   const handleDelete = async (id) => {
-    // Aquí puedes añadir la lógica para eliminar la marca con el ID especificado
     const confirm = window.confirm(
       "¿Estás seguro de que deseas eliminar este producto?"
     );
@@ -75,7 +73,6 @@ const Marca = (props) => {
         setMarcas(marcas.filter((marca) => marca.id !== id));
 
         sessionStorage.setItem("mensaje", "Marca borrado correctamente");
-      
       } catch (err) {
         setDataErr("Ha ocurrido un error al intentar eliminar el producto");
       }
