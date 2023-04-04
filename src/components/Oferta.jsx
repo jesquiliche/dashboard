@@ -13,7 +13,7 @@ import { getFetchData } from "../services/APIGets";
 
 
 const Oferta = (props) => {
-  
+  const apiUrl=process.env.REACT_APP_API_URL;
   const [ofertas, setOfertas] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading,setIsLoading]=useState(false);
@@ -21,7 +21,7 @@ const Oferta = (props) => {
   useEffect(() => {
     const cargarDatos = async ()=>{
       setIsLoading(true);
-      await getFetchData("http://localhost:8000/api/v1/ofertas",
+      await getFetchData(`${apiUrl}/api/v1/ofertas`,
       setOfertas, setDataErr);
       setIsLoading(false);
     };

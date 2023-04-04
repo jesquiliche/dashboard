@@ -3,6 +3,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 const Register = (props) => {
+  const apiUrl=process.env.REACT_APP_API_URL;
   let { id } = useParams();
 
   const [datos, setDatos] = useState({
@@ -29,7 +30,7 @@ const Register = (props) => {
 
   //Insertar en base de datos
   const InsertarDatos = async () => {
-      const data = await fetch("http://localhost:8000/api/register", {
+      const data = await fetch(`${apiUrl}/api/register`, {
       method: "POST",
       body: JSON.stringify(datos), // data can be `string` or {object}!
       headers: {

@@ -17,15 +17,17 @@ const columns = [
 ];
 
 const Poblacion = (props) => {
+  const apiUrl=process.env.REACT_APP_API_URL;
   const [provincias, setProvincias] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dataErr, setDataErr] = useState();
+  
 
   useEffect(() => {
     const cargarDatos = async () => {
       setIsLoading(true);
       await getFetchData(
-        "http://localhost:8000/api/v1/provincias",
+        `${apiUrl}/api/v1/provincias`,
         setProvincias,
         setDataErr
       );

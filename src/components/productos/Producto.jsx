@@ -12,6 +12,7 @@ import "react-tooltip/dist/react-tooltip.css";
 
 const Producto = (props) => {
   // Estados
+  const apiUrl=process.env.REACT_APP_API_URL;
   const [productos, setProductos] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -100,7 +101,7 @@ const Producto = (props) => {
     if (confirm) {
       try {
         // Borrar el producto de la base de datos
-        deleteFetchData(`http://localhost:8000/api/v1/productos/${id}`);
+        deleteFetchData(`${apiUrl}/api/v1/productos/${id}`);
         // Actualizar el estado de productos sin el producto borrado
         await setProductos(productos.filter((producto) => producto.id !== id));
         // Mostrar un mensaje de éxito
@@ -119,7 +120,7 @@ const Producto = (props) => {
         setIsLoading(true);
         //Llamada a la API
         await getFetchData(
-          "http://localhost:8000/api/v1/productos",
+          `${apiUrl}/api/v1/productos`,
           setProductos,
           setDataErr
         );

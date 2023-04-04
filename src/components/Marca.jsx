@@ -14,6 +14,7 @@ import { deleteFetchData } from "../services/APIDeletes";
 import DataTable from 'react-data-table-component';
 
 const Marca = (props) => {
+  const apiUrl=process.env.REACT_APP_API_URL;
   const [marcas, setMarcas] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -53,8 +54,9 @@ const Marca = (props) => {
   useEffect(() => {
     const cargaDatos = async () => {
       setIsLoading(true);
+    
       await getFetchData(
-        "http://localhost:8000/api/v1/marcas",
+        `${apiUrl}/api/v1/marcas`,
         setMarcas,
         setDataErr
       );

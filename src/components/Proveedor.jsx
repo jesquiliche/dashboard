@@ -8,6 +8,8 @@ import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 
 const Proveedor = (props) => {
+  const apiUrl=process.env.REACT_APP_API_URL;  
+
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dataErr, setDataErr] = useState();
@@ -19,7 +21,7 @@ const Proveedor = (props) => {
   const cargarDatos = async () => {
     setLoading(true);
     await getFetchData(
-      "http://localhost:8000/api/v1/proveedores",
+      `${apiUrl}/api/v1/proveedores`,
       setProveedores,
       setDataErr
     );
@@ -29,7 +31,7 @@ const Proveedor = (props) => {
   const handleDelete = async (id) => {
     try {
       if (window.confirm("¿Está seguro que desea eliminar este proveedor?")) {
-        await deleteFetchData(`http://localhost:8000/api/v1/proveedores/${id}`);
+        await deleteFetchData(`${apiUrl}/api/v1/proveedores/${id}`);
         setProveedores(
           proveedores.filter((proveedores) => proveedores.id !== id)
         );
