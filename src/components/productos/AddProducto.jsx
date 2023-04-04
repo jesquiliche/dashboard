@@ -110,11 +110,16 @@ useEffect(() => {
     try {
         const url = `http://localhost:8000/api/v1/productos`;
         await postFetchData(url, producto);
+        navigate("/Producto");
     } catch (error) {
-        alert(error);
+        const status=error.message.split(": ")[2];
+        if(status==422)
+          setError("Artículo existente");
+        else
+          setError(error);
     }
     setCargando(false);
-    navigate("/Producto");
+    
   };
 
   return (
@@ -131,7 +136,7 @@ useEffect(() => {
             ""
           )}
 
-          <h5>{error ? error.message : ""}</h5>
+          <h5>{error ? error : ""}</h5>
         </div>
 
         <div className="card-body">
@@ -159,7 +164,7 @@ useEffect(() => {
                     placeholder="Descripción"
                     value={producto.descripcion}
                     onChange={handleOnChange}
-                    rows="10"
+                    rows="10" required
                   >
                     {producto.descripcion}
                   </textarea>

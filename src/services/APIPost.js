@@ -17,6 +17,8 @@ export const postFetchData = async (url, data) => {
     });
 
     if (!response.ok) {
+     
+      
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const responseData = await response.json();

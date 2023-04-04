@@ -67,11 +67,11 @@ const Content = ({ sidebarIsOpen, toggleSidebar }) => (
         />
         <Route
           exact
-          path="/Editproveedor"
+          path="/editproveedor"
           element={
-            <RequireAuth>
+      //      <RequireAuth>
               <EditProveedor />
-            </RequireAuth>
+      //      </RequireAuth>
           }
         />
         
