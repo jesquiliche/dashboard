@@ -8,7 +8,7 @@ import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 
 const Proveedor = (props) => {
-  const apiUrl=process.env.REACT_APP_API_URL;  
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,11 +20,16 @@ const Proveedor = (props) => {
 
   const cargarDatos = async () => {
     setLoading(true);
-    await getFetchData(
-      `${apiUrl}/api/v1/proveedores`,
-      setProveedores,
-      setDataErr
-    );
+    try {
+      await getFetchData(
+        `${apiUrl}/api/v1/proveedores`,
+        setProveedores,
+        setDataErr
+      );
+    } catch (error) {
+      setDataErr(error);
+    }
+
     setLoading(false);
   };
 

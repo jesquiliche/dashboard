@@ -17,21 +17,24 @@ const columns = [
 ];
 
 const Poblacion = (props) => {
-  const apiUrl=process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [provincias, setProvincias] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dataErr, setDataErr] = useState();
-  
 
   useEffect(() => {
     const cargarDatos = async () => {
       setIsLoading(true);
-      await getFetchData(
-        `${apiUrl}/api/v1/provincias`,
-        setProvincias,
-        setDataErr
-      );
-      // setProvincias(data);
+      try {
+        await getFetchData(
+          `${apiUrl}/api/v1/provincias`,
+          setProvincias,
+          setDataErr
+        );
+      } catch (error) {
+        setDataErr(error);
+      }
+
       setIsLoading(false);
     };
     try {
@@ -57,10 +60,11 @@ const Poblacion = (props) => {
                 </div>
               </div>
             ) : (
-              <MyDataTable title="Provincias"
+              <MyDataTable
+                title="Provincias"
                 data={provincias}
-                columns={columns} />
-               
+                columns={columns}
+              />
             )}
           </div>
           {dataErr ? (

@@ -1,40 +1,37 @@
 import { useState, useEffect } from "react";
 import React from "react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Spinner,
-} from "reactstrap";
+import { Button, Card, CardBody, CardHeader, Spinner } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { getFetchData } from "../services/APIGets";
 import { deleteFetchData } from "../services/APIDeletes";
-import DataTable from 'react-data-table-component';
+import DataTable from "react-data-table-component";
 
 const Marca = (props) => {
-  const apiUrl=process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [marcas, setMarcas] = useState([]);
   const [dataErr, setDataErr] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const columns = [
     {
-      name: 'id',
-      selector: 'id',
+      name: "id",
+      selector: "id",
       sortable: true,
     },
     {
-      name: 'Nombre',
-      selector: 'nombre',
+      name: "Nombre",
+      selector: "nombre",
       sortable: true,
     },
     {
-      name: 'Acciones',
+      name: "Acciones",
       cell: (row) => (
         <div width={200}>
           <Button color="primary" className="mx-1">
-            <FontAwesomeIcon icon={faEdit} className="ml-0 text-white mx-auto" />
+            <FontAwesomeIcon
+              icon={faEdit}
+              className="ml-0 text-white mx-auto"
+            />
           </Button>
           <Button
             color="danger"
@@ -54,12 +51,12 @@ const Marca = (props) => {
   useEffect(() => {
     const cargaDatos = async () => {
       setIsLoading(true);
-    
-      await getFetchData(
-        `${apiUrl}/api/v1/marcas`,
-        setMarcas,
-        setDataErr
-      );
+      try {
+        await getFetchData(`${apiUrl}/api/v1/marcas`, setMarcas, setDataErr);
+      } catch (error) {
+        setDataErr(error);
+      }
+
       setIsLoading(false);
     };
     cargaDatos();
@@ -95,7 +92,7 @@ const Marca = (props) => {
               </div>
             ) : (
               <DataTable
-              columns={columns}
+                columns={columns}
                 data={marcas}
                 striped={true}
                 pagination

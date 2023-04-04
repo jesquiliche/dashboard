@@ -127,6 +127,7 @@ const Producto = (props) => {
 
         setIsLoading(false);
       } catch (error) {
+        setDataErr(error);
         setIsLoading(false);
       }
     };

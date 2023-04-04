@@ -21,8 +21,12 @@ const Oferta = (props) => {
   useEffect(() => {
     const cargarDatos = async ()=>{
       setIsLoading(true);
-      await getFetchData(`${apiUrl}/api/v1/ofertas`,
-      setOfertas, setDataErr);
+      try {
+        await getFetchData(`${apiUrl}/api/v1/ofertas`,
+        setOfertas, setDataErr);
+      } catch(error){
+        setDataErr(error);
+      }
       setIsLoading(false);
     };
     cargarDatos();
