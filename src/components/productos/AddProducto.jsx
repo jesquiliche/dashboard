@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const AddProducto = (props) => {
+  const apiUrl=process.env.REACT_APP_API_URL;
   const { id } = useParams();
   const navigate = useNavigate();
   const [producto, setProducto] = useState({
@@ -38,7 +39,7 @@ const AddProducto = (props) => {
 
   const handleUploadImage = async () => {
     setCargando(true); 
-    const data=await uploadImage('http://localhost:8000/api/v1/upload-image',selectedImage);
+    const data=await uploadImage(`${apiUrl}/api/v1/upload-image`,selectedImage);
     setProducto({
       ...producto,
       imagen: data.url,
@@ -63,25 +64,25 @@ useEffect(() => {
     const cargarDatos = async () => {
       setCargando(true);
       await getFetchData(
-        "http://localhost:8000/api/v1/subcategorias",
+        `${apiUrl}/api/v1/subcategorias`,
         setSubcategorias,
         setError
       );
 
       await getFetchData(
-        "http://localhost:8000/api/v1/marcas",
+        `${apiUrl}/api/v1/marcas`,
         setMarcas,
         setError
       );
 
       await getFetchData(
-        "http://localhost:8000/api/v1/ivas",
+        `${apiUrl}/api/v1/ivas`,
         setIvas,
         setError
       );
 
       await getFetchData(
-        "http://localhost:8000/api/v1/categorias",
+        `${apiUrl}/api/v1/categorias`,
         setCategorias,
         setError
       );
@@ -104,11 +105,8 @@ useEffect(() => {
   };
 
   const añadirProducto = async (producto) => {
-    setCargando(true);
-    console.log("Entro");
-    console.log(producto);
-    try {
-        const url = `http://localhost:8000/api/v1/productos`;
+     try {
+        const url = `${apiUrl}/api/v1/productos`;
         await postFetchData(url, producto);
         navigate("/Producto");
     } catch (error) {

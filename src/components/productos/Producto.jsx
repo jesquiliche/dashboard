@@ -49,7 +49,7 @@ const Producto = (props) => {
       name: "Foto",
       cell: (row) => (
         <img
-          src={`http://localhost:8000${row.imagen}`}
+          src={`${apiUrl}${row.imagen}`}
           className="img-pequeña"
           alt="Foto"
         />
@@ -118,7 +118,7 @@ const Producto = (props) => {
     const cargarDatos = async () => {
       try {
         setIsLoading(true);
-        //Llamada a la API
+        //Llamada a la API{}
         await getFetchData(
           `${apiUrl}/api/v1/productos`,
           setProductos,

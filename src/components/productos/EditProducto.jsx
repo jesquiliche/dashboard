@@ -21,6 +21,8 @@ const EditProducto = (props) => {
   const [error, setError] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const apiUrl=process.env.REACT_APP_API_URL;
+  const [apiURL,setApiURL]=useState(apiUrl);
   const imgRef = useRef(null);
 
 
@@ -52,31 +54,32 @@ useEffect(() => {
   
   
   useEffect(() => {
+    
     const cargarDatos = async () => {
       setCargando(true);
 
       await obtenerProducto(id, setProducto, setError);
 
       await getFetchData(
-        "http://localhost:8000/api/v1/subcategorias",
+        `${apiUrl}/api/v1/subcategorias`,
         setSubcategorias,
         setError
       );
 
       await getFetchData(
-        "http://localhost:8000/api/v1/marcas",
+        `${apiUrl}/api/v1/marcas`,
         setMarcas,
         setError
       );
 
       await getFetchData(
-        "http://localhost:8000/api/v1/ivas",
+        `${apiUrl}/api/v1/ivas`,
         setIvas,
         setError
       );
 
       await getFetchData(
-        "http://localhost:8000/api/v1/categorias",
+        `${apiUrl}/api/v1/categorias`,
         setCategorias,
         setError
       );
@@ -101,7 +104,7 @@ useEffect(() => {
   const actualizarProducto = async (producto) => {
     setCargando(true);
 
-    const url = `http://localhost:8000/api/v1/productos/${id}`;
+    const url = `${apiUrl}/api/v1/productos/${id}`;
     await putFetchData(url, producto);
     setCargando(false);
     navigate("/Producto");
@@ -129,7 +132,7 @@ useEffect(() => {
             <div className="row">
               <div className="col-md-4 card mt-2">
                 <img
-                  src={`http://localhost:8000${producto.imagen}`}
+                  src={`${apiUrl}${producto.imagen}`}
                   className="img-grande mt-2" ref={imgRef}
                 />
               </div>
